@@ -16,7 +16,7 @@ namespace Assignment1
             double x; //input
             int n; //input
             double power; //output
-            int factorial; //output
+            long factorial; //output
 
             //define n, x
             do
@@ -33,7 +33,6 @@ namespace Assignment1
             {
                 factorial *= i;
             }
-
 
             //find x^n
             power = x;
@@ -58,6 +57,9 @@ namespace Assignment1
             //case 3: n! = 362 880, x^n = 19683 + 
             //case 4: n! = 479 001 600, x^n = 23 298 085 122 481 + 
             //case 5: n! = -288 522 240, x^n ≈ 0.000007629 -
+
+            //after fix:
+            //case 5: n! = 355 687 428 096 000, x^n ≈ 0.000007629 +
         }
     }
 }
