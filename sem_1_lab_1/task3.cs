@@ -20,10 +20,10 @@ namespace Assignment1
 
             //test output:
             //case 1: factorial = 6, power = 8
-            //case 2: factorial = , power = 1024
-            //case 3: factorial = , power = 19683
-            //case 4: factorial = , power = 23298085
-            //case 5: factorial = , power ≈ 0.000007629
+            //case 2: factorial = 120, power = 1024
+            //case 3: factorial = 362 880, power = 19683
+            //case 4: factorial = 479 001 600, power = 23 298 085
+            //case 5: factorial = 87 178 291 200, power ≈ 0.000007629
         }
     }
 }
