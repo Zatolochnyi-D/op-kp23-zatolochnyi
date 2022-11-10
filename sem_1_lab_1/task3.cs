@@ -6,8 +6,10 @@ namespace Assignment1
     {
         static void Main(string[] args)
         {
-            double x, n; //input
-            double factorial, power; //output
+            double x; //input
+            int n; //input
+            double power; //output
+            int factorial; //output
         }
     }
 }
