@@ -23,7 +23,7 @@ namespace Assignment1
             //case 3: False
             //case 4: True
             //case 5: False
-            //case 6: True
+            //case 6: False
             //case 7: False
         }
     }
