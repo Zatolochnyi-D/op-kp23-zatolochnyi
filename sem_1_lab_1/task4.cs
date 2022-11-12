@@ -59,6 +59,10 @@ namespace Assignment1
             //case 8: sin(x) = 0.7568024953079275, Math.Sin(x) = 0.7568024953079282, Delta ≈ 0   +
             //case 9: sin(x) = 3.2442957833995775E+78, Math.Sin(x) = -0.9988166912028097, Delta = -3.2442957833995775E+78 -
             //case 10:sin(x) = NaN, Math.Sin(x) = 0.9300284271630885, Delta = NaN -
+
+            //after fix:
+            //case 9: sin(x) = 0.9170983321949878, Math.Sin(x) =  0.9170983323330107, Delta ≈ 0 +
+            //case 10:sin(x) = 0.24646667906375547, Math.Sin(x) = 0.2464666790637572, Delta ≈ 0 +
         }
 
         //Set x within [-2π; 2π]
@@ -76,7 +80,7 @@ namespace Assignment1
             {
                 if (x < 0)
                 {
-                    while (npi > -2 * Math.PI)
+                    while (npi < -2 * Math.PI)
                     {
                         npi += 2 * Math.PI;
                     }
