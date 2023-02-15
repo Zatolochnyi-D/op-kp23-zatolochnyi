@@ -1,0 +1,5 @@
+this string will
+be written to
+some file with
+3 words per
+line.
