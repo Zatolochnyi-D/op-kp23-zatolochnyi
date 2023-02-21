@@ -25,6 +25,7 @@ namespace Assignment1
             }
         }
 
+        //create 1D array of n double numbers, generated with Random
         static double[] PseudoRandomNumbers(int n)
         {
             return new double[0];
@@ -34,5 +35,18 @@ namespace Assignment1
         {
             return 0;
         }
+
+        static void Task2Test()
+        {
+
+        }
     }
 }
+
+//input:
+//1.3 4.5 9.1 1.2 4.3 8.6 3.6 0.2 4.5 7.6 1.2 4.9 6.7 0.4 3.3
+//PseudoRandomNumbers(15)
+
+//expected output:
+//0.2
+//*some double*
