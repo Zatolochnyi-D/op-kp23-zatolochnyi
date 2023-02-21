@@ -12,7 +12,7 @@ namespace Assignment1
             
         }
         
-        static void Write(string path)
+        static void Write(string path, params string[] text)
         {
             
         }
@@ -23,3 +23,11 @@ namespace Assignment1
         }
     }
 }
+
+//input:
+//Write(pathToFile + "Task1.txt", "Hello", "world")
+//Read(pathToFile + "Task1.txt")
+
+//expected output:
+//Hello
+//world
