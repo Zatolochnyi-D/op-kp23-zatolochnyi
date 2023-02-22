@@ -48,3 +48,13 @@ namespace Assignment1
         }
     }
 }
+
+//input:
+//students
+
+//expected output:
+//First name: Stu1, Last name: Dent1, Score: 56
+//First name: Stu2, Last name: Dent2, Score: 28
+//First name: Stu4, Last name: Dent4, Score: 35
+//First name: Stu6, Last name: Dent6, Score: 46
+//First name: Stu7, Last name: Dent7, Score: 59
