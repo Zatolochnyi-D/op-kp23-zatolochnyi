@@ -104,5 +104,5 @@ namespace Assignment1
 //PseudoRandomNumbers(15)
 
 //expected output:
-//8.6
+//9.1
 //*some double*
