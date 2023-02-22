@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Assignment1
 {
-    public class Task2
+    public class Task3
     {
         static string pathToFile = "../../../";
 
@@ -83,3 +83,9 @@ namespace Assignment1
         }
     }
 }
+
+//input:
+//words
+
+//expected output:
+//Sort result is equal to sortedWords
