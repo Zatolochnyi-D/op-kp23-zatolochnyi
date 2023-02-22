@@ -7,7 +7,7 @@ namespace Assignment1
     {
         static string pathToFile = "../../../";
 
-        string[] students = new string[]
+        static string[] students = new string[]
         {
             "Stu1,Dent1,56",
             "Stu2,Dent2,28",
@@ -17,11 +17,12 @@ namespace Assignment1
             "Stu6,Dent6,46",
             "Stu7,Dent7,59",
             "Stu8,Dent8,85",
+            "Stu9,Dent9,60",
         };
 
         static void Main()
         {
-            
+            Task4Test();
         }
 
         //write in file some text
@@ -37,14 +38,80 @@ namespace Assignment1
             }
         }
 
-        static void Read()
+        //read students from file, split and check for score. Write all students with score < 60
+        static void Read(string path)
         {
+            using (StreamReader sr = new(path))
+            {
+                string[] line;
+                bool writeNoOne = true;
+                while (!sr.EndOfStream)
+                {
+                    line = Split(',', sr.ReadLine());
+                    if (int.Parse(line[2]) < 60)
+                    {
+                        Console.WriteLine(Join(' ', line));
+                        writeNoOne = false;
+                    }
+                }
 
+                if (writeNoOne)
+                {
+                    Console.WriteLine("There are no students with a score < 60");
+                }
+            }
         }
 
-        static string[] Split()
+        //split text with separator
+        static string[] Split(char separator, string line)
         {
-            return new string[0];
+            int n = 1;
+            for (int i = 0; i < line.Length; i++)
+            {
+                if (line[i] == separator)
+                {
+                    n++;
+                }
+            }
+
+            string[] res = new string[n];
+            string word = "";
+            n = 0;
+            for (int i = 0; i < line.Length; i++)
+            {
+                if (line[i] == separator)
+                {
+                    res[n] = word;
+                    word = "";
+                    n++;
+                    continue;
+                }
+
+                word += line[i];
+            }
+            res[n] = word;
+
+            return res;
+        }
+
+        //create string from string array
+        static string Join(char separator, string[] words)
+        {
+            string res = "";
+            res += words[0];
+            for (int i = 1; i < words.Length; i++)
+            {
+                res += " " + words[i];
+            }
+
+            return res;
+        }
+
+        static void Task4Test()
+        {
+            Write(pathToFile + "Task4.csv", students);
+
+            Read(pathToFile + "Task4.csv");
         }
     }
 }
@@ -53,8 +120,8 @@ namespace Assignment1
 //students
 
 //expected output:
-//First name: Stu1, Last name: Dent1, Score: 56
-//First name: Stu2, Last name: Dent2, Score: 28
-//First name: Stu4, Last name: Dent4, Score: 35
-//First name: Stu6, Last name: Dent6, Score: 46
-//First name: Stu7, Last name: Dent7, Score: 59
+//Stu1 Dent1 56
+//Stu2 Dent2 28
+//Stu4 Dent4 35
+//Stu6 Dent6 46
+//Stu7 Dent7 59
