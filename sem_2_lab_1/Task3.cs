@@ -61,7 +61,7 @@ namespace Assignment1
 
         static void Main()
         {
-            
+            Task3Test();
         }
 
         //write in file some text
@@ -77,9 +77,116 @@ namespace Assignment1
             }
         }
 
-        static void Sort()
+        //read words, sort them and write to new file
+        static string[] Sort(string pathToUnsorted, string pathToSorted)
         {
+            string[] w = new string[40];
 
+            using (StreamReader sr = new(pathToUnsorted))
+            {
+                int c = 0;
+                for (int i = 0; i < w.Length; i++)
+                {
+                    if (sr.EndOfStream)
+                    {
+                        break;
+                    }
+                    c++;
+                    w[i] = sr.ReadLine();
+                }
+
+                Console.WriteLine(c);
+                w = Resize(w, c);
+
+                string key;
+                int j;
+                for (int i = 1; i < w.Length; i++)
+                {
+                    key = w[i];
+                    j = i - 1;
+                    while (j >= 0 && Compare(w[j], key))
+                    {
+                        w[j + 1] = w[j];
+                        j -= 1;
+                    }
+                    w[j + 1] = key;
+                }
+            }
+
+            Write(pathToSorted, w);
+            return w;
+        }
+
+        //create new array with size n and move elements from target array to it
+        static string[] Resize(string[] target, int n)
+        {
+            string[] res = new string[n];
+
+            for (int i = 0; i < n; i++)
+            {
+                res[i] = target[i];
+            }
+
+            return res;
+        }
+
+        //compare to words. Order: b a -> true, a b -> false
+        static bool Compare(string a, string b)
+        {
+            int l = Math.Min(a.Length, b.Length);
+
+            for (int i = 0; i < l; i++)
+            {
+                if (a[i] > b[i])
+                {
+                    return true;
+                }
+                else if (a[i] < b[i])
+                {
+                    return false;
+                }
+            }
+
+            if (a.Length > l)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        //compare two arrays
+        static bool Equals(string[] a, string[] b)
+        {
+            if (a.Length != b.Length)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < a.Length; i++)
+            {
+                if (a[i] != b[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        static void Task3Test()
+        {
+            Write(pathToFile + "Task3Unsorted.txt", words);
+            if (Equals(sortedWords, Sort(pathToFile + "Task3Unsorted.txt", pathToFile + "Task3Sorted.txt")))
+            {
+                Console.WriteLine("Sort result is equal to sortedWords");
+            }
+            else
+            {
+                Console.WriteLine("Sort result isn't equal to sortedWords");
+            }
         }
     }
 }
