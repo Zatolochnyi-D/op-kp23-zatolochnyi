@@ -17,7 +17,7 @@ namespace Assignment1
 
         static void Main()
         {
-
+            Task5Test();
         }
 
         //write in file some text
@@ -32,14 +32,91 @@ namespace Assignment1
                 }
             }
         }
+
+        //count number of each word in text, located in file
         static void CountWords(string path)
         {
+            using (StreamReader sr = new(path))
+            {
+                string word = "";
+                string whiteList = "abcdefghijklmnopqrstuvwxyz-"; //characters which can be in word
+                char next;
 
+                //dictionary
+                string[] keys = new string[10];
+                int[] values = new int[10];
+                int count = 0;
+
+                //flag that word not in dictionary
+                bool added;
+
+                while (!sr.EndOfStream)
+                {
+                    //construct word from allowed characters
+                    next = char.ToLower((char)sr.Read());
+                    if (!Contains(whiteList, next))
+                    {
+                        continue;
+                    }
+                    while (Contains(whiteList, next))
+                    {
+                        word += next;
+                        next = (char)sr.Read();
+                    }
+
+                    //increase counter if word in dictionary or add to it if not
+                    added = false;
+                    for (int i = 0; i < count; i++)
+                    {
+                        if (keys[i] == word)
+                        {
+                            values[i]++;
+                            added = true;
+                        }
+                    }
+                    if (!added)
+                    {
+                        keys[count] = word;
+                        values[count] = 1;
+                        count++;
+                    }
+
+                    //increase size of dictionary arrays if it is not enough
+                    if (count == keys.Length)
+                    {
+                        Array.Resize(ref keys, keys.Length * 2);
+                        Array.Resize(ref values, values.Length * 2);
+                    }
+
+                    //reset word
+                    word = "";
+                }
+
+                //after reading print result
+                for (int i = 0; i < count; i++)
+                {
+                    Console.WriteLine($"{keys[i]}: {values[i]}");
+                }
+            }
         }
 
-        static void Contains(string word, char letter)
+        //true if word has this letter
+        static bool Contains(string word, char letter)
         {
+            for (int i = 0; i < word.Length; i++)
+            {
+                if (word[i] == letter)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
+        static void Task5Test()
+        {
+            Write(pathToFile + "Task5.txt", text);
+            CountWords(pathToFile + "Task5.txt");
         }
     }
 }
@@ -82,3 +159,5 @@ namespace Assignment1
 //that: 1
 //just: 1
 //bug-fixing: 1
+
+//result matched
