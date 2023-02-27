@@ -33,3 +33,9 @@ namespace Assignment1
         }
     }
 }
+
+//input:
+//Task4.csv
+
+//expected output:
+//Stu3 Dent3 97
