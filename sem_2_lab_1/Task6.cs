@@ -33,8 +33,8 @@ namespace Assignment1
 
         static void RewriteBinary(string fromPath, string toPath)
         {
-            using(BinaryReader br = new(File.Open(fromPath, FileMode.Open)))
-            using(BinaryWriter wr = new(File.Open(toPath, FileMode.Create)))
+            using (BinaryReader br = new(File.Open(fromPath, FileMode.Open)))
+            using (BinaryWriter wr = new(File.Open(toPath, FileMode.Create)))
             {
                 string firstName, lastName, score;
 
@@ -48,7 +48,9 @@ namespace Assignment1
 
                         if (int.Parse(score) >= 95)
                         {
-                            Console.WriteLine($"{firstName} {lastName} {score}");
+                            wr.Write(firstName);
+                            wr.Write(lastName);
+                            wr.Write(score);
                         }
                     }
                     catch (IOException)
@@ -61,7 +63,7 @@ namespace Assignment1
 
         static void ReadBinary(string path)
         {
-            using(BinaryReader br = new(File.Open(path, FileMode.OpenOrCreate)))
+            using (BinaryReader br = new(File.Open(path, FileMode.OpenOrCreate)))
             {
                 while (true)
                 {
@@ -82,6 +84,7 @@ namespace Assignment1
         {
             ToBinary(pathToFile + "Task4.csv", pathToFile + "Task6.dat");
             RewriteBinary(pathToFile + "Task6.dat", pathToFile + "Task6Best.dat");
+            ReadBinary(pathToFile + "Task6Best.dat");
             Console.WriteLine("\n\nThe content of Task6.dat:\n");
             ReadBinary(pathToFile + "Task6.dat");
         }
