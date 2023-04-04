@@ -2,10 +2,10 @@ using System;
 
 namespace Assignment2
 {
-	class Program
-	{
-		static void Main()
-		{
+    class Program
+    {
+        static void Main()
+        {
             Vessel[] vessels = new Vessel[5];
             Random rnd = new();
 
@@ -39,11 +39,11 @@ namespace Assignment2
                 vessels[i].Move();
             }
         }
-	}
+    }
 
-	public abstract class Vessel
-	{
-		public abstract void PrepareToMove();
+    interface Vessel
+    {
+        public abstract void PrepareToMove();
 
         public abstract void Move();
     }
@@ -55,12 +55,12 @@ namespace Assignment2
 
         }
 
-        public override void Move()
+        public void Move()
         {
             Console.WriteLine("Ship is moving");
         }
 
-        public override void PrepareToMove()
+        public void PrepareToMove()
         {
             Console.WriteLine("Ship raises its sails");
         }
@@ -73,15 +73,14 @@ namespace Assignment2
 
         }
 
-        public override void Move()
+        public void Move()
         {
             Console.WriteLine("Submarine is moving");
         }
 
-        public override void PrepareToMove()
+        public void PrepareToMove()
         {
             Console.WriteLine("Submarine starts its engines");
         }
     }
 }
-
