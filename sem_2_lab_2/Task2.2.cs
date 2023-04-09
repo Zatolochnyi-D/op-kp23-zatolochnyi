@@ -43,16 +43,16 @@ namespace Assignment2
 
     interface Vessel
     {
-        public abstract void PrepareToMove();
+        public void PrepareToMove();
 
-        public abstract void Move();
+        public void Move();
     }
 
     public class SailingVessel : Vessel
     {
         public SailingVessel()
         {
-
+            
         }
 
         public void Move()
