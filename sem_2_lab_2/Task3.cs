@@ -54,11 +54,11 @@ namespace Assignment2
 //expected output:
 //case 1:
 //  a + b = -7
-//  a * b = -16
+//  a * b = 0
 //  a / b = 1
 //case 2:
 //  a + b = -7
-//  a * b = -12
+//  a * b = 0
 //  a / b = 2
 //case 3:
 //  a + b = 0
