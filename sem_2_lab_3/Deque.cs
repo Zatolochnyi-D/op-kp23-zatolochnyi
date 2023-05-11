@@ -1,36 +1,99 @@
 ﻿using System;
+using System.Collections;
 
 namespace Assignment
 {
+    // ARRAY-BASED DEQUE PART
+
+    public class DequeIterator<T> : IIterator<T>
+    {
+        private IDeque<T> _thisDeque;
+
+        public bool HasNext => !_thisDeque.isEmpty();
+
+        // O(1)
+        public DequeIterator(IDeque<T> deque)
+        {
+            _thisDeque = deque;
+        }
+
+        // O(1)
+        public T Next()
+        {
+            if (HasNext)
+            {
+                return _thisDeque.RemoveFirst();
+            }
+            throw new Exception("Deque is empty");
+        }
+    }
+
+
+    public class DequeEnumerator<T> : IEnumerator<T>
+    {
+        private IDeque<T> _thisDeque;
+
+        // O(1)
+        public DequeEnumerator(IDeque<T> deque)
+        {
+            _thisDeque = deque;
+        }
+
+        // O(1)
+        public T Current => _thisDeque.RemoveLast();
+
+        // O(1)
+        object IEnumerator.Current => Current;
+
+        public void Dispose() {}
+
+        // O(1)
+        public bool MoveNext()
+        {
+            return !_thisDeque.isEmpty();
+        }
+
+        public void Reset() {}
+    }
+
+
     // array-based deque
-    public class ADeque<T> : IDeque<T>
+    public class ADeque<T> : IDeque<T>, IIterable<T>
     {
         private T[] _array;
-        private int _sizeOfArray;
-        private int _amountOfElements;
+        private int _size;
+        private int _elementCount;
 
         private int _head;
         private int _tale;
 
-        public int Count => _amountOfElements;
+        public int Count => _elementCount;
+        public int Capacity { get => _size; set => Resize(value); }
 
-        public int Capacity { get => _sizeOfArray; set => Resize(value); }
+        // O(1)
+        private Func<int, int, int> mod = (int x, int y) =>
+        {
+            int r = x % y;
+            return r < 0 ? r + y : r;
+        };
 
+        // O(1)
         public ADeque()
         {
-            _sizeOfArray = 4;
-            _amountOfElements = 0;
+            _size = 4;
+            _elementCount = 0;
             _head = 0;
             _tale = 0;
 
-            _array = new T[_sizeOfArray];
+            _array = new T[_size];
         }
 
+        // O(n)
         public ADeque(params T[] array)
         {
-            _sizeOfArray = array.Length;
-            _array = new T[_sizeOfArray];
-            _amountOfElements = 0;
+            _size = array.Length;
+            _array = new T[_size];
+            _elementCount = 0;
             _head = 0;
             _tale = 0;
 
@@ -40,73 +103,69 @@ namespace Assignment
             }
         }
 
-        public ADeque(ADeque<T> deque)
-        {
-            _sizeOfArray = deque.Count;
-            _array = new T[_sizeOfArray];
-            _amountOfElements = 0;
-            _head = 0;
-            _tale = 0;
-
-            for (int i = 0; i < _sizeOfArray; i++)
-            {
-                AddLast(deque.RemoveFirst());
-            }
-        }
-
+        // O(n)
         private void Resize(int toSize)
         {
             T[] tmp = new T[toSize];
 
-            for (int i = 0; i < _amountOfElements; i++)
+            for (int i = 0; i < _elementCount; i++)
             {
-                tmp[i] = _array[(_head + i) % _sizeOfArray];
+                tmp[i] = _array[(_head + i) % _size];
             }
 
             _head = 0;
-            _tale = _sizeOfArray - 1;
+            _tale = _elementCount - 1;
 
-            _sizeOfArray = toSize;
+            _size = toSize;
+            _array = tmp;
         }
 
+        // O(1)
         public bool isEmpty()
         {
-            return _amountOfElements == 0 ? true : false;
+            return _elementCount == 0 ? true : false;
         }
 
+        // O(1) / O(n)
         public void AddFirst(T item)
         {
-            _head = (_head - 1) % _sizeOfArray;
-
-            if (_head == _tale)
+            if (_elementCount == _size)
             {
-                Resize(_sizeOfArray * 2);
-                _head = _sizeOfArray - 1;
+                Resize(_size * 2);
             }
 
-            _array[_head] = item;
-            _amountOfElements++;
+            if (_elementCount == 0)
+            {
+                _array[_head] = item;
+                _elementCount++;
+            }
+            else
+            {
+                _head = mod(_head - 1, _size);
+
+                _array[_head] = item;
+                _elementCount++;
+            }
         }
 
-        public T PeekFirst(T item)
+        // O(1)
+        public T PeekFirst()
         {
             if (!isEmpty())
             {
                 return _array[_head];
             }
-            else
-            {
-                throw new Exception("Deque is empty");
-            }
+            else throw new Exception("Deque is empty");
         }
 
+        // O(1)
         public T RemoveFirst()
         {
             if (!isEmpty())
             {
-                _head = (_head + 1) % _sizeOfArray;
-                _amountOfElements--;
-                return _array[(_head - 1) % _sizeOfArray];
+                _head = mod(_head + 1, _size);
+                _elementCount--;
+                return _array[mod(_head - 1, _size)];
             }
             else
             {
@@ -114,46 +173,89 @@ namespace Assignment
             }
         }
 
+        // O(1) / O(n)
         public void AddLast(T item)
         {
-            _tale = (_tale + 1) % _sizeOfArray;
-
-            if (_head == _tale)
+            if (_elementCount == _size)
             {
-                Resize(_sizeOfArray * 2);
-                _tale++;
+                Resize(_size * 2);
             }
 
-            _array[_tale] = item;
-            _amountOfElements++;
+            if (_elementCount == 0)
+            {
+                _array[_tale] = item;
+                _elementCount++;
+            }
+            else
+            {
+                _tale = mod(_tale + 1, _size);
+
+                _array[_tale] = item;
+                _elementCount++;
+            }
         }
 
-        public T PeekLast(T item)
+        // O(1)
+        public T PeekLast()
         {
             if (!isEmpty())
             {
                 return _array[_tale];
             }
+            else throw new Exception("Deque is empty");
+        }
+
+        // O(1)
+        public T RemoveLast()
+        {
+            if (!isEmpty())
+            {
+                _tale = mod(_tale - 1, _size);
+                _elementCount--;
+                return _array[mod(_tale + 1, _size)];
+            }
             else
             {
                 throw new Exception("Deque is empty");
             }
         }
 
-        public T RemoveLast()
+        // O(n)
+        public object Clone()
         {
-            if (!isEmpty())
-            {
-                _tale = (_tale - 1) % _sizeOfArray;
-                _amountOfElements--;
-                return _array[(_tale + 1) % _sizeOfArray];
-            }
-            else
-            {
-                throw new Exception("Deque is empty");
-            }
+            ADeque<T> deq = new();
+            deq.Capacity = _size;
+            _array.CopyTo(deq._array, 0);
+
+            deq._size = _size;
+            deq._elementCount = _elementCount;
+            deq._head = _head;
+            deq._tale = _tale;
+
+            return deq;
+        }
+
+        // O(1)
+        public IIterator<T> GetIterator()
+        {
+            return new DequeIterator<T>(this);
+        }
+
+        // O(1)
+        public IEnumerator<T> GetEnumerator()
+        {
+            return new DequeEnumerator<T>(this);
+        }
+
+        // O(1)
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
+
+
+    // LINKED LIST-BASED DEQUE PART
 
     // linked list-based deque
     public class LDeque

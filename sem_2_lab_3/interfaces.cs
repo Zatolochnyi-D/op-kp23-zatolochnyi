@@ -2,8 +2,8 @@
 
 namespace Assignment
 {
-	interface IDeque<T>
-	{
+	public interface IDeque<T> : ICloneable, IEnumerable<T>
+    {
 		int Count { get; }
 
 		int Capacity { get; set; }
@@ -12,20 +12,25 @@ namespace Assignment
 
 		void AddFirst(T item);
 
-        T PeekFirst(T item);
+        T PeekFirst();
 
         T RemoveFirst();
 
 		void AddLast(T item);
 
-		T PeekLast(T item);
+		T PeekLast();
 
         T RemoveLast();
     }
 
-    interface IIterator<T>
+    public interface IIterator<T>
 	{
 		bool HasNext { get; }
 		T Next();
+	}
+
+	public interface IIterable<T>
+	{
+		IIterator<T> GetIterator();
 	}
 }
