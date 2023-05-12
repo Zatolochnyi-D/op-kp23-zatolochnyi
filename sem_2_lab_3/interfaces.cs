@@ -6,8 +6,6 @@ namespace Assignment
     {
 		int Count { get; }
 
-		int Capacity { get; set; }
-
 		bool isEmpty();
 
 		void AddFirst(T item);
