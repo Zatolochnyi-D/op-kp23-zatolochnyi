@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 
 namespace Assignment
 {
@@ -178,12 +179,91 @@ namespace Assignment
         }
     }
 
-	// linked list-based randomized queue
-	public class LRandomizedQueue<T>
-	{
-		public LRandomizedQueue()
-		{
 
-		}
-	}
+
+	// linked list-based randomized queue
+	public class LRandomizedQueue<T> : IRandomizedQueue<T>, IIterable<T>
+	{
+        private SLList<T> _list;
+
+        private Random _rnd = new();
+
+        public int Count => _list.Count;
+
+        // O(1)
+        public LRandomizedQueue()
+        {
+            _list = new();
+        }
+
+        // O(n)
+        public LRandomizedQueue(params T[] values)
+        {
+            _list = new(values);
+        }
+
+        // O(1)
+        public bool isEmpty()
+        {
+            return Count == 0;
+        }
+
+        // O(1)
+        public void Enqueue(T item)
+        {
+            _list.Add(item);
+        }
+
+        // O(n)
+        public T Dequeue()
+        {
+            if (!isEmpty())
+            {
+                int index = _rnd.Next(0, Count);
+                T val = _list[index];
+
+                _list.RemoveAt(index);
+
+                return val;
+            }
+            else
+            {
+                throw new Exception("Queue is empty");
+            }
+        }
+
+        // O(n)
+        public T Peek()
+        {
+            return _list[_rnd.Next(0, Count)];
+        }
+
+        // O(n)
+        public object Clone()
+        {
+            LRandomizedQueue<T> queue = new();
+
+            queue._list = (SLList<T>)_list.Clone();
+
+            return queue;
+        }
+
+        // O(1)
+        public IIterator<T> GetIterator()
+        {
+            return new QueueIterator<T>(this);
+        }
+
+        // O(1)
+        public IEnumerator<T> GetEnumerator()
+        {
+            return new QueueEnumerator<T>(this);
+        }
+
+        // O(1)
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+    }
 }
