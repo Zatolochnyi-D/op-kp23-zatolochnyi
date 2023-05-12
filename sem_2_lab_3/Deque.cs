@@ -258,11 +258,96 @@ namespace Assignment
     // LINKED LIST-BASED DEQUE PART
 
     // linked list-based deque
-    public class LDeque
+    public class LDeque<T> : IDeque<T>, IIterable<T>
     {
+        private SLList<T> _list;
+
+        // O(1)
         public LDeque()
         {
+            _list = new();
+        }
 
+        // O(n)
+        public LDeque(params T[] array)
+        {
+            _list = new(array);
+        }
+
+        public int Count => _list.Count;
+
+        // O(1)
+        public bool isEmpty()
+        {
+            return Count == 0;
+        }
+
+        // O(1)
+        public void AddFirst(T item)
+        {
+            _list.Insert(0, item);
+        }
+
+        // O(1)
+        public T PeekFirst()
+        {
+            return _list[0];
+        }
+
+        // O(1)
+        public T RemoveFirst()
+        {
+            T value = _list[0];
+            _list.RemoveAt(0);
+            return value;
+        }
+
+        // O(1)
+        public void AddLast(T item)
+        {
+            _list.Add(item);
+        }
+
+        // O(1)
+        public T PeekLast()
+        {
+            return _list[Count - 1];
+        }
+
+        // O(n)
+        public T RemoveLast()
+        {
+            T value = PeekLast();
+            _list.RemoveAt(Count - 1);
+            return value;
+        }
+
+        // O(n)
+        public object Clone()
+        {
+            LDeque<T> deq = new();
+
+            deq._list = (SLList<T>)_list.Clone();
+
+            return deq;
+        }
+
+        // O(1)
+        public IIterator<T> GetIterator()
+        {
+            return new DequeIterator<T>(this);
+        }
+
+        // O(1)
+        public IEnumerator<T> GetEnumerator()
+        {
+            return new DequeEnumerator<T>(this);
+        }
+
+        // O(1)
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }
