@@ -21,6 +21,19 @@ namespace Assignment
         T RemoveLast();
     }
 
+	public interface IRandomizedQueue<T> : ICloneable, IEnumerable<T>
+	{
+        int Count { get; }
+
+        bool isEmpty();
+
+        void Enqueue(T item);
+
+        T Dequeue();
+
+        T Peek();
+    }
+
     public interface IIterator<T>
 	{
 		bool HasNext { get; }
