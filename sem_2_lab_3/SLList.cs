@@ -52,7 +52,7 @@ namespace Assignment
 
 
     // single-linked list
-    public class SLList<T> : IList<T>
+    public class SLList<T> : IList<T>, ICloneable
     {
         private SLNode<T>? _head;
         private SLNode<T>? _tale;
@@ -108,7 +108,7 @@ namespace Assignment
                 SLNode<T> node = _head;
                 for (int i = 0; i < index; i++)
                 {
-                    node = _head.next;
+                    node = node.next;
                 }
 
                 return node.data;
@@ -118,7 +118,7 @@ namespace Assignment
         // O(1) / O(n)
         private void SetAt(int index, T item)
         {
-            if (index < 0 || index >= _size)
+            if (index < 0 || index > _size)
             {
                 throw new IndexOutOfRangeException();
             }
@@ -130,12 +130,16 @@ namespace Assignment
             {
                 _tale.data = item;
             }
+            else if (index == _size)
+            {
+                Add(item);
+            }
             else
             {
                 SLNode<T> node = _head;
                 for (int i = 0; i < index; i++)
                 {
-                    node = _head.next;
+                    node = node.next;
                 }
 
                 node.data = item;
@@ -182,7 +186,7 @@ namespace Assignment
                 SLNode<T> node = _head;
                 for (int i = 0; i < index - 1; i++)
                 {
-                    node = _head.next;
+                    node = node.next;
                 }
 
                 node.next = new(item, node.next);
@@ -243,10 +247,11 @@ namespace Assignment
                 SLNode<T> node = _head;
                 for (int i = 0; i < index - 1; i++)
                 {
-                    node = _head.next;
+                    node = node.next;
                 }
 
                 node.next = node.next.next;
+                _tale = node;
                 _size--;
             }
         }
@@ -288,6 +293,21 @@ namespace Assignment
                 array[i] = node.data;
                 node = node.next;
             }
+        }
+
+        // O(n)
+        public object Clone()
+        {
+            T[] array = new T[Count];
+            CopyTo(array, 0);
+
+            return new SLList<T>(array);
+
+            // O(n^2)
+            //for (int i = 0; i < Count; i++)
+            //{
+            //    list[i] = this[i];
+            //}
         }
 
         // O(1)
