@@ -7,7 +7,93 @@ namespace Assignment
 	{
 		static void Main(string[] args)
 		{
-            ADequeFullTest();
+            SLListFullTest();
+            //ADequeFullTest();
+        }
+
+        static void SLListFullTest()
+        {
+            Console.WriteLine("Single-linked list test.");
+            Console.WriteLine("");
+
+            Console.WriteLine("Creating two lists...");
+            SLList<string> list1 = new();
+            SLList<string> list2 = new(new string[] { "word1", "word2", "word3", "word4" });
+            Console.WriteLine("Lists are created.");
+            Console.WriteLine("");
+
+            Console.WriteLine("Adding elements to the first list: word5, word6, word7");
+            list1.Add("word5");
+            list1.Add("word6");
+            list1.Add("word7");
+            Console.WriteLine("");
+
+            Console.WriteLine("Accessing second element in each list:");
+            Console.WriteLine(list1[1]);
+            Console.WriteLine(list2[1]);
+            Console.WriteLine("");
+
+            Console.WriteLine("Traverse both lists:");
+            foreach (string s in list1)
+            {
+                Console.Write(s + " ");
+            }
+            Console.WriteLine("");
+            foreach (string s in list2)
+            {
+                Console.Write(s + " ");
+            }
+            Console.WriteLine("");
+            Console.WriteLine("");
+
+            Console.WriteLine("Replace first element in list2 with word0:");
+            list2[0] = "word0";
+            Console.WriteLine(list2[0]);
+            Console.WriteLine("");
+
+            Console.WriteLine("Insert word1 in list2 at position 1. list2:");
+            list2.Insert(1, "word1");
+            foreach (string s in list2)
+            {
+                Console.Write(s + " ");
+            }
+            Console.WriteLine("");
+            Console.WriteLine("");
+
+            Console.WriteLine("Index of word6 and word9:" + list1.IndexOf("word6") + list1.IndexOf("word9"));
+            Console.WriteLine("");
+
+            Console.WriteLine("Contains list1 word1? " + list1.Contains("word1"));
+            Console.WriteLine("");
+
+            Console.WriteLine("Remove word1 from both lists");
+            Console.WriteLine("list1: " + list1.Remove("word1"));
+            Console.WriteLine("list2: " + list2.Remove("word1"));
+            Console.WriteLine("");
+
+            Console.WriteLine("Remove from both lists from 0 position");
+            list1.RemoveAt(0);
+            list2.RemoveAt(0);
+            Console.WriteLine("");
+
+            Console.WriteLine("Expected lists:");
+            Console.WriteLine("list1: word6 word7");
+            Console.WriteLine("list2: word2 word3 word4");
+            Console.WriteLine("Got:");
+            foreach (string s in list1)
+            {
+                Console.Write(s + " ");
+            }
+            Console.WriteLine("");
+            foreach (string s in list2)
+            {
+                Console.Write(s + " ");
+            }
+            Console.WriteLine("");
+            Console.WriteLine("");
+
+            Console.WriteLine("SLList works correctly!");
+            Console.WriteLine("");
         }
 
 		static void ADequeFullTest()
