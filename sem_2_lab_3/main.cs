@@ -9,7 +9,8 @@ namespace Assignment
 		{
             //SLListFullTest();
             //ADequeFullTest();
-            LDequeFullTest();
+            //LDequeFullTest();
+            ARandimizedQequeFullTest();
         }
 
         static void SLListFullTest()
@@ -205,6 +206,56 @@ namespace Assignment
             Console.WriteLine("Now both deques are empty:");
             Console.WriteLine(deque.isEmpty());
             Console.WriteLine(deque2.isEmpty());
+        }
+
+        static void ARandimizedQequeFullTest()
+        {
+            Console.WriteLine("Array-based randomized queue test.");
+            ARandomizedQueue<int> queue = new();
+            Console.WriteLine("Queue created");
+            Console.WriteLine($"Queue is empty: {queue.isEmpty()}");
+            Console.WriteLine("");
+
+            Console.WriteLine("Adding elements to the queue: 8, 2, 5, 1, 5, 8, 3, 5");
+            queue.Enqueue(8);
+            queue.Enqueue(2);
+            queue.Enqueue(5);
+            queue.Enqueue(1);
+            queue.Enqueue(5);
+            queue.Enqueue(8);
+            queue.Enqueue(3);
+            queue.Enqueue(5);
+            Console.WriteLine("");
+
+            Console.WriteLine($"Deque is empty: {queue.isEmpty()}");
+            Console.WriteLine("Peek two elements:");
+            Console.WriteLine(queue.Peek());
+            Console.WriteLine(queue.Peek());
+            Console.WriteLine("");
+
+            Console.WriteLine("Create clone to use iterator");
+            ARandomizedQueue<int> queue2 = (ARandomizedQueue<int>)queue.Clone();
+            Console.WriteLine("");
+
+            Console.WriteLine("Iterate clone of queue:");
+            IIterator<int> iterator = queue2.GetIterator();
+            while (iterator.HasNext)
+            {
+                Console.Write(iterator.Next() + " ");
+            }
+            Console.WriteLine("");
+
+            Console.WriteLine("Iterate original queue with enumerator:");
+            foreach (int n in queue)
+            {
+                Console.Write(n + " ");
+            }
+            Console.WriteLine("");
+            Console.WriteLine("");
+
+            Console.WriteLine("Now both queues are empty:");
+            Console.WriteLine(queue.isEmpty());
+            Console.WriteLine(queue2.isEmpty());
         }
     }
 }

@@ -123,7 +123,7 @@ namespace Assignment
         // O(1)
         public bool isEmpty()
         {
-            return _elementCount == 0 ? true : false;
+            return _elementCount == 0;
         }
 
         // O(1) / O(n)
