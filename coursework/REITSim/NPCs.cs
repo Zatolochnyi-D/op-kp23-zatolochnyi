@@ -1,12 +1,10 @@
 ﻿using System;
-namespace REITSim
+using CustomCollections;
+
+namespace GameMechanics
 {
-	public class Investor
-	{
-		public Investor()
-		{
-		}
-	}
+	
+
 
 	public class Client
 	{

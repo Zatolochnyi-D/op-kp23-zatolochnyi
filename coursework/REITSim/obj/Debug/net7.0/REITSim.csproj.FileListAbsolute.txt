@@ -1,0 +1,15 @@
+/Users/denis/Desktop/KPI/Year1Sem2/BP/op-kp23-zatolochnyi/coursework/REITSim/bin/Debug/net7.0/REITSim
+/Users/denis/Desktop/KPI/Year1Sem2/BP/op-kp23-zatolochnyi/coursework/REITSim/bin/Debug/net7.0/REITSim.deps.json
+/Users/denis/Desktop/KPI/Year1Sem2/BP/op-kp23-zatolochnyi/coursework/REITSim/bin/Debug/net7.0/REITSim.runtimeconfig.json
+/Users/denis/Desktop/KPI/Year1Sem2/BP/op-kp23-zatolochnyi/coursework/REITSim/bin/Debug/net7.0/REITSim.dll
+/Users/denis/Desktop/KPI/Year1Sem2/BP/op-kp23-zatolochnyi/coursework/REITSim/bin/Debug/net7.0/REITSim.pdb
+/Users/denis/Desktop/KPI/Year1Sem2/BP/op-kp23-zatolochnyi/coursework/REITSim/obj/Debug/net7.0/REITSim.csproj.AssemblyReference.cache
+/Users/denis/Desktop/KPI/Year1Sem2/BP/op-kp23-zatolochnyi/coursework/REITSim/obj/Debug/net7.0/REITSim.GeneratedMSBuildEditorConfig.editorconfig
+/Users/denis/Desktop/KPI/Year1Sem2/BP/op-kp23-zatolochnyi/coursework/REITSim/obj/Debug/net7.0/REITSim.AssemblyInfoInputs.cache
+/Users/denis/Desktop/KPI/Year1Sem2/BP/op-kp23-zatolochnyi/coursework/REITSim/obj/Debug/net7.0/REITSim.AssemblyInfo.cs
+/Users/denis/Desktop/KPI/Year1Sem2/BP/op-kp23-zatolochnyi/coursework/REITSim/obj/Debug/net7.0/REITSim.csproj.CoreCompileInputs.cache
+/Users/denis/Desktop/KPI/Year1Sem2/BP/op-kp23-zatolochnyi/coursework/REITSim/obj/Debug/net7.0/REITSim.dll
+/Users/denis/Desktop/KPI/Year1Sem2/BP/op-kp23-zatolochnyi/coursework/REITSim/obj/Debug/net7.0/refint/REITSim.dll
+/Users/denis/Desktop/KPI/Year1Sem2/BP/op-kp23-zatolochnyi/coursework/REITSim/obj/Debug/net7.0/REITSim.pdb
+/Users/denis/Desktop/KPI/Year1Sem2/BP/op-kp23-zatolochnyi/coursework/REITSim/obj/Debug/net7.0/REITSim.genruntimeconfig.cache
+/Users/denis/Desktop/KPI/Year1Sem2/BP/op-kp23-zatolochnyi/coursework/REITSim/obj/Debug/net7.0/ref/REITSim.dll
