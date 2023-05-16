@@ -1,5 +1,6 @@
 ﻿using System;
-namespace REITSim
+
+namespace GameMechanics
 {
 	public class Territory
 	{

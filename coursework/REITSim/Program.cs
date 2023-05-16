@@ -6,7 +6,6 @@ namespace GameMechanics
     {
         static void Main()
         {
-
         }
     }
 }
