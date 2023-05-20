@@ -3,145 +3,123 @@ using CustomCollections;
 
 namespace GameMechanics
 {
-	public class Player
-	{
-        // shares
+    public class Player
+    {
+        // === shares ===
         protected Shares _playerShares;
         protected Shares _sharesOnExchange;
-        protected float _sharePercentPrice = 100.0f;
-		protected Investor _investor;
+        protected double _oneSharePrice = 0.0;
+        protected Shares _investor;
 
-		// stats
+        // === stats ===
         protected int _reputation = 0;
-		protected float _income = 1000.0f;
-		protected float _money = 0.0f;
+        protected double _income = 1000.0;
+        protected double _outcome = 0.0;
+        protected double _money = 0.0;
 
-		public int Reputation
-		{
-			get { return _reputation; }
-			set { _reputation = value; }
-		}
+        // === data that can be accessed and changed from outside ===
 
-		public float Income
-		{
-			get { return _income; }
-			set { _income = value; }
-		}
+        public int Reputation
+        {
+            get { return _reputation; }
+            set { _reputation = value; }
+        }
 
-		public float SharePrice
-		{
-			get { return _sharePercentPrice; }
-			set { _sharePercentPrice = value; }
-		}
+        // === data that can be accessed from outside ===
 
-		public float Shares => _playerShares.Percent;
+        public double SharePrice => _oneSharePrice;
+        public double Shares => _playerShares.Percent;
+        public double Income => _income;
+        public double Money => _money;
 
-		public Player()
-		{
-			_playerShares = new(100.0f, this);
-			_sharesOnExchange = new(0.0f, this);
-			_investor = new(this);
-		}
+        // === getters for testing ===
+        internal Shares PlayerShares => _playerShares;
+        internal Shares SharesOnExchange => _sharesOnExchange;
+        // SharePrice
+        internal double InvestorShares => _investor.Percent;
+        // Reputation
+        // Income
+        // Money
 
-		// Set part of player shares to sale. Investors will by some part each turn.
-		// Selling decrease reputation and price
-		// O(TODO)
-		public void SharesToSell(float amount)
-		{
-			_playerShares.Percent -= amount;
-			_sharesOnExchange.Percent += amount;
+        public Player()
+        {
+            _playerShares = new(100.0);
+            _sharesOnExchange = new(0.0);
+            _investor = new(0.0);
+        }
+
+        public void SharesToSell(double amount)
+        {
+            _playerShares.Percent -= amount;
+            _sharesOnExchange.Percent += amount;
 
             _reputation -= (int)Math.Floor(amount);
-		}
-
-		// Buy shares from investor
-		// Buying increase reputation and price
-		public void BuyShares(float amount)
-		{
-
-		}
-
-		// Update data when moving to the next turn.
-		public void NextTurn()
-		{
-			// Update price of shares:
-			UpdateSharePrice();
-
-			// Sell some shares to investor:
-			SellShares();
-		}
-
-        // Update price of 1% of share
-        // price = income from 1% share + <reputation>%
-        // O(1)
-        protected void UpdateSharePrice()
-		{
-            _sharePercentPrice = (_income / 100.0f) * (1.0f + (float)_reputation / 100.0f);
+            if (_reputation < -100)
+            {
+                _reputation = -100;
+            }
         }
 
-        // Sell shares to investor.
-		// Sells random amount of shares
-		// O(1)
+        public void BuyShares(double amount)
+        {
+            _reputation += (int)Math.Floor(amount);
+            if (_reputation > 100)
+            {
+                _reputation = 100;
+            }
+            UpdateSharePrice();
+
+            _money = Math.Round(_money - amount * _oneSharePrice, 2);
+            _playerShares.Percent += amount;
+            _investor.Percent -= amount;
+        }
+
+        public void NextTurn()
+        {
+            UpdateSharePrice();
+
+            SellShares();
+        }
+
+        protected void UpdateSharePrice()
+        {
+            _oneSharePrice = (_income / 100.0) * (1.0 + _reputation / 100.0);
+            _oneSharePrice = Math.Round(_oneSharePrice, 2);
+        }
+
         protected void SellShares()
         {
-			float sharesAmount = _sharesOnExchange.Percent * ((float)World.Random.Next(101) / 100.0f);
+            if (_sharesOnExchange.Percent != 0.0)
+            {
+                double[] parts = new double[] { 0.0, 0.25, 0.25, 0.5, 0.5, 0.75, 0.75, 1.0, 1.0, 1.0 };
 
-			_sharesOnExchange.Percent -= sharesAmount;
-			_investor.Shares.Percent += sharesAmount;
-			_money += sharesAmount * _sharePercentPrice;
-        }
-    }
+                double sharesAmount = _sharesOnExchange.Percent * parts[World.Random.Next(0, 10)];
+                sharesAmount = Math.Round(sharesAmount, 2);
+                sharesAmount = Math.Min(_sharesOnExchange.Percent, sharesAmount);
 
-
-    public class Investor
-    {
-        protected Shares _shares;
-
-		// O(1)
-        public Shares Shares => _shares;
-
-		// O(1)
-        public Investor(Player player)
-        {
-            _shares = new(0.0f, player);
+                _sharesOnExchange.Percent -= sharesAmount;
+                _investor.Percent += sharesAmount;
+                _money = Math.Round(_money + sharesAmount * _oneSharePrice, 2);
+            }
         }
     }
 
 
     public class Shares
-	{
-		static protected Player _playerRef;
+    {
+        protected double _percent;
 
-		protected float _percent;
-		protected float _price;
+        // O(1), O(1)
+        public double Percent
+        {
+            get { return _percent; }
+            set { _percent = Math.Round(value, 2); }
+        }
 
-		// O(1), O(1)
-		public float Percent
-		{
-			get { return _percent; }
-			set
-			{
-				_percent = value;
-				UpdatePrice();
-			}
-		}
-
-		// O(1)
-		public float Price => _price;
-
-		// O(1)
-		public Shares(float percent, Player player)
-		{
-			_playerRef = player;
-			_percent = percent;
-
-			UpdatePrice();
-		}
-
-		// O(1)
-		public void UpdatePrice()
-		{
-			_price = _playerRef.SharePrice * _percent;
-		}
-	}
+        // O(1)
+        public Shares(double percent)
+        {
+            _percent = percent;
+        }
+    }
 }
