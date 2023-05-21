@@ -1,4 +1,5 @@
 ﻿using System;
+using CustomCollections;
 
 namespace GameMechanics
 {
@@ -6,7 +7,18 @@ namespace GameMechanics
     {
         static void Main()
         {
-            SharesTradingTest(21.2);
+            //SLList<Client> clients = new();
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    clients.Add(new());
+            //}
+
+            //foreach (Client c in clients)
+            //{
+            //    Console.WriteLine(c.Name);
+            //}
+
+            //SharesTradingTest(21.2);
         }
 
         static void PlayerStats(Player player)

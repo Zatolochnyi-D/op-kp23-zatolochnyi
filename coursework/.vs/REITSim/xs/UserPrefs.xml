@@ -1,13 +1,15 @@
 ﻿<Properties StartupConfiguration="{911ECC27-CCB6-4E20-8FEB-4A68A42D81C4}|Default">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.Workbench ActiveDocument="REITSim/Program.cs">
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.REITSim PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="REITSim/Player.cs">
     <Files>
-      <File FileName="REITSim/Program.cs" Line="20" Column="37" />
-      <File FileName="REITSim/Player.cs" Line="72" Column="60" />
+      <File FileName="REITSim/Program.cs" Line="26" Column="35" />
+      <File FileName="REITSim/Player.cs" Line="86" Column="78" />
       <File FileName="REITSim/NPCs.cs" />
       <File FileName="REITSim/World.cs" />
       <File FileName="REITSim/SLList.cs" />
@@ -17,14 +19,10 @@
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="REITSim" expanded="True">
-            <Node name="REITSim" expanded="True">
-              <Node name="Program.cs" selected="True" />
-            </Node>
+            <Node name="REITSim" expanded="True" />
           </Node>
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
-  <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.ItemProperties.REITSim PreferredExecutionTarget="MonoDevelop.Default" />
 </Properties>
