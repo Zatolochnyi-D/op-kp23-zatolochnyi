@@ -84,6 +84,7 @@ namespace GameMechanics
         protected void UpdateSharePrice()
         {
             _oneSharePrice = (_income / 100.0) * (1.0 + _reputation / 100.0);
+
             _oneSharePrice = Math.Round(_oneSharePrice, 2);
         }
 
@@ -93,7 +94,7 @@ namespace GameMechanics
             {
                 double[] parts = new double[] { 0.0, 0.25, 0.25, 0.5, 0.5, 0.75, 0.75, 1.0, 1.0, 1.0 };
 
-                double sharesAmount = _sharesOnExchange.Percent * parts[World.Random.Next(0, 10)];
+                double sharesAmount = _sharesOnExchange.Percent * parts[World.Random.Next(0, parts.Length)];
                 sharesAmount = Math.Round(sharesAmount, 2);
                 sharesAmount = Math.Min(_sharesOnExchange.Percent, sharesAmount);
 
