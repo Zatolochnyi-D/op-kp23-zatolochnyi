@@ -11,6 +11,9 @@ namespace GameMechanics
         protected double _oneSharePrice = 0.0;
         protected Shares _investor;
 
+        // === property ===
+        protected SLList<Land> _property;
+
         // === stats ===
         protected int _reputation = 0;
         protected double _income = 1000.0;
@@ -46,6 +49,7 @@ namespace GameMechanics
             _playerShares = new(100.0);
             _sharesOnExchange = new(0.0);
             _investor = new(0.0);
+            _property = new();
         }
 
         public void SharesToSell(double amount)
@@ -101,6 +105,16 @@ namespace GameMechanics
                 _sharesOnExchange.Percent -= sharesAmount;
                 _investor.Percent += sharesAmount;
                 _money = Math.Round(_money + sharesAmount * _oneSharePrice, 2);
+            }
+        }
+
+        protected void UpdateProperty()
+        {
+            foreach (Land land in _property)
+            {
+                _income = land.TotalCost;
+
+                land.NextTurn();
             }
         }
     }
