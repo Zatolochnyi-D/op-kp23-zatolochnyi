@@ -19,6 +19,37 @@ namespace GameMechanics
             //}
 
             //SharesTradingTest(21.2);
+
+            RequirementTest();
+
+            CityTest();
+        }
+
+        static void CityTest()
+        {
+            City city = new();
+
+            Console.WriteLine($"City tax percent: {city.Taxation}");
+            Console.WriteLine($"City lands:");
+            foreach (Land land in city.Lands)
+            {
+                Console.WriteLine($"    Land taxation: {land.Taxation}");
+                Console.WriteLine($"    Land building:");
+                Console.WriteLine($"    {land.Building?.GetType()}");
+                Console.WriteLine();
+            }
+
+        }
+
+        static void RequirementTest()
+        {
+            Requirement req = new();
+
+            Building a = req.GetBuilding();
+
+            Console.WriteLine("Requirement test.");
+            Console.WriteLine(a.GetType());
+            Console.WriteLine("End of Requirement test\n");
         }
 
         static void PlayerStats(Player player)
