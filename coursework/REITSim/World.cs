@@ -7,9 +7,13 @@ namespace GameMechanics
     {
         public static readonly Random Random = new();
 
-        public World()
+        protected Player _player;
+
+        public Player Player => _player;
+
+        public World(string name)
         {
-            
+            _player = new(name);
         }
 
         public void NextTurn()
