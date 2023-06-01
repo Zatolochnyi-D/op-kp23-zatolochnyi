@@ -5,41 +5,37 @@ namespace GameMechanics
 {
     public class Player
     {
+        protected const double _startingCapital = 1000.0;
+
+        // === stats ===
+        protected string _name;
+        protected int _reputation;
+        protected double _money;
+        protected double _income;
+
         // === shares ===
         protected Shares _playerShares;
         protected Shares _sharesOnExchange;
-        protected double _oneSharePrice = 0.0;
         protected Shares _investor;
+        protected double _oneSharePrice;
 
         // === property ===
         protected SLList<Land> _property;
 
-        // === stats ===
-        protected string _name;
-        protected int _reputation = 0;
-        protected double _income = 1000.0;
-        protected double _outcome = 0.0;
-        protected double _money = 0.0;
 
-        // === data that can be accessed and changed from outside ===
-
-        public int Reputation
-        {
-            get { return _reputation; }
-            set { _reputation = value; }
-        }
 
         // === data that can be accessed from outside ===
 
         public string Name => _name;
+        public int Reputation => _reputation;
         public double SharePrice => _oneSharePrice;
         public double Shares => _playerShares.Percent;
+        public double SharesOnExchange => _sharesOnExchange.Percent;
         public double Income => _income;
         public double Money => _money;
 
         // === getters for testing ===
         internal Shares PlayerShares => _playerShares;
-        internal Shares SharesOnExchange => _sharesOnExchange;
         // SharePrice
         internal double InvestorShares => _investor.Percent;
         // Reputation
@@ -50,6 +46,12 @@ namespace GameMechanics
         {
             _name = name;
 
+            _reputation = 0;
+            _money = _startingCapital;
+            _income = 0.0;
+
+            _oneSharePrice = 0.0;
+
             _playerShares = new(100.0);
             _sharesOnExchange = new(0.0);
             _investor = new(0.0);
@@ -58,28 +60,34 @@ namespace GameMechanics
 
         public void SharesToSell(double amount)
         {
-            _playerShares.Percent -= amount;
-            _sharesOnExchange.Percent += amount;
-
-            _reputation -= (int)Math.Floor(amount);
-            if (_reputation < -100)
+            if (amount <= Shares)
             {
-                _reputation = -100;
+                _playerShares.Percent -= amount;
+                _sharesOnExchange.Percent += amount;
+
+                _reputation -= (int)Math.Floor(amount);
+                if (_reputation < -100)
+                {
+                    _reputation = -100;
+                }
             }
         }
 
         public void BuyShares(double amount)
         {
-            _reputation += (int)Math.Floor(amount);
-            if (_reputation > 100)
+            if (amount <= _investor.Percent)
             {
-                _reputation = 100;
-            }
-            UpdateSharePrice();
+                _reputation += (int)Math.Floor(amount);
+                if (_reputation > 100)
+                {
+                    _reputation = 100;
+                }
+                UpdateSharePrice();
 
-            _money = Math.Round(_money - amount * _oneSharePrice, 2);
-            _playerShares.Percent += amount;
-            _investor.Percent -= amount;
+                _money = Math.Round(_money - amount * _oneSharePrice, 2);
+                _playerShares.Percent += amount;
+                _investor.Percent -= amount;
+            }
         }
 
         public void NextTurn()
@@ -98,7 +106,7 @@ namespace GameMechanics
 
         protected void SellShares()
         {
-            if (_sharesOnExchange.Percent != 0.0)
+            if (_sharesOnExchange.Percent != 0.0 && SharePrice != 0.0)
             {
                 double[] parts = new double[] { 0.0, 0.25, 0.25, 0.5, 0.5, 0.75, 0.75, 1.0, 1.0, 1.0 };
 

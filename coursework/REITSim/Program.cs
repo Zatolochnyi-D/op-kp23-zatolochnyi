@@ -7,22 +7,11 @@ namespace GameMechanics
     {
         static void Main()
         {
-            //SLList<Client> clients = new();
-            //for (int i = 0; i < 10; i++)
-            //{
-            //    clients.Add(new());
-            //}
-
-            //foreach (Client c in clients)
-            //{
-            //    Console.WriteLine(c.Name);
-            //}
-
             //SharesTradingTest(21.2);
 
-            RequirementTest();
+            //RequirementTest();
 
-            CityTest();
+            //CityTest();
         }
 
         static void CityTest()
@@ -56,7 +45,7 @@ namespace GameMechanics
         {
             Console.WriteLine("Player stats:");
             Console.WriteLine($"Player shares: {player.PlayerShares.Percent}");
-            Console.WriteLine($"Shares on exchange: {player.SharesOnExchange.Percent}");
+            Console.WriteLine($"Shares on exchange: {player.SharesOnExchange}");
             Console.WriteLine($"Player reputation: {player.Reputation}");
             Console.WriteLine($"Player money: {player.Money}");
             Console.WriteLine($"Shares price: {player.SharePrice}");
@@ -76,7 +65,7 @@ namespace GameMechanics
             PlayerStats(player);
 
             Console.WriteLine("Next turn while player have shares to sell:");
-            while (player.SharesOnExchange.Percent != 0.0)
+            while (player.SharesOnExchange != 0.0)
             {
                 player.NextTurn();
                 PlayerStats(player);
