@@ -66,7 +66,7 @@ namespace GameMechanics
 
         static void SharesTradingTest(double percent)
         {
-            Player player = new();
+            Player player = new("Name");
 
             PlayerStats(player);
 
