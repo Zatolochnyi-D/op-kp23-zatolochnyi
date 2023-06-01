@@ -40,8 +40,8 @@ def update_main_page() -> None:
     mediator = PM.pages["main_game_menu"]
 
     mediator.mediate(0, 0, 0, info[0])
-    mediator.mediate(0, 1, 0, f"Finances: {info[1]}")
-    mediator.mediate(0, 2, 0, f"Reputation: {info[2]}")
+    mediator.mediate(0, 1, 0, f"Reputation: {info[1]}")
+    mediator.mediate(0, 2, 0, f"Finances: {info[2]}")
     mediator.mediate(0, 3, 0, f"Shares available: {info[3]}" + (f" ({info[5]} on exchange)" if info[5] != 0.0 else ""))
     mediator.mediate(0, 4, 0, f"Share price: {info[4]}")
 
@@ -142,23 +142,26 @@ pages = {
 
     "main_game_menu": [
         [
-            SimplifiedLabel(tk, {"text": "", "font": ("Comic Sans MS", 50)},
+            SimplifiedLabel(tk, {"text": "Name", "font": ("Comic Sans MS", 50)},
                             {"relx": 0.1, "rely": 0.05, "anchor": "nw"}),
 
-            SimplifiedLabel(tk, {"text": "", "font": ("Comic Sans MS", 35)},
+            SimplifiedLabel(tk, {"text": "Reputation", "font": ("Comic Sans MS", 35)},
                             {"relx": 0.1, "rely": 0.2, "anchor": "nw"}),
 
-            SimplifiedLabel(tk, {"text": "", "font": ("Comic Sans MS", 35)},
+            SimplifiedLabel(tk, {"text": "Finances", "font": ("Comic Sans MS", 35)},
                             {"relx": 0.1, "rely": 0.28, "anchor": "nw"}),
 
-            SimplifiedLabel(tk, {"text": "", "font": ("Comic Sans MS", 20)},
+            SimplifiedLabel(tk, {"text": "Shares", "font": ("Comic Sans MS", 20)},
                             {"relx": 0.1, "rely": 0.7, "anchor": "nw"}),
 
-            SimplifiedLabel(tk, {"text": "", "font": ("Comic Sans MS", 20)},
+            SimplifiedLabel(tk, {"text": "Share price", "font": ("Comic Sans MS", 20)},
                             {"relx": 0.1, "rely": 0.75, "anchor": "nw"}),
 
             SimplifiedLabel(tk, {"text": "How much?", "font": ("Comic Sans MS", 20)},
                             {"relx": 0.1, "rely": 0.8, "anchor": "nw"}),
+
+            SimplifiedLabel(tk, {"text": "<Turn counter>", "font": ("Comic Sans MS", 20)},
+                            {"relx": 0.6, "rely": 0.95, "anchor": "se"}),
         ],
         [
             SimplifiedButton(tk, {"text": "Sell Shares", "font": ("Comic Sans MS", 20), "command": open_sell_shares},
@@ -174,7 +177,7 @@ pages = {
                              {"relx": 0.1, "rely": 0.85, "anchor": "nw", "relwidth": 0.2, "relheight": 0.05}),
 
             SimplifiedButton(tk, {"text": "Next turn", "font": ("Comic Sans MS", 30), "command": next_turn},
-                             {"relx": 0.6, "rely": 0.7, "anchor": "nw", "relwidth": 0.3, "relheight": 0.1}),
+                             {"relx": 0.95, "rely": 0.95, "anchor": "se", "relwidth": 0.3, "relheight": 0.15}),
         ],
         [
             SimplifiedEntry(tk, {"font": ("Comic Sans MS", 20)},

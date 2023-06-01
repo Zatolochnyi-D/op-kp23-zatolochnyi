@@ -15,7 +15,7 @@ class GameManager:
         self._game = gm.World(name)
 
     def get_player_stats(self) -> list:
-        return [self._game.Player.Name, self._game.Player.Money, self._game.Player.Reputation,
+        return [self._game.Player.Name, self._game.Player.Reputation, self._game.Player.Money,
                 self._game.Player.Shares, self._game.Player.SharePrice, self._game.Player.SharesOnExchange]
 
     def sell_shares(self, input: str) -> None:
