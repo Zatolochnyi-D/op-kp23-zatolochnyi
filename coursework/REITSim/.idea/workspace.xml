@@ -6,15 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="a52580e7-0b18-42ef-bf8f-342df39d3178" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FirstNames.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GUIComponents.py" beforeDir="false" afterPath="$PROJECT_DIR$/GUIComponents.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GameManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/GameManager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Mediator.py" beforeDir="false" afterPath="$PROJECT_DIR$/Mediator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NPCs.cs" beforeDir="false" afterPath="$PROJECT_DIR$/NPCs.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Player.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Player.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SecondNames.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ThirdNames.csv" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
