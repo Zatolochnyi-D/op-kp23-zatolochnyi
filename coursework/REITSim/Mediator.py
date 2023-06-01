@@ -23,5 +23,11 @@ class Mediator:
             for element in elements:
                 element.forget()
 
+    def on(self, target_class: int, target_object: int) -> None:
+        self._elements[target_class][target_object].place()
+
+    def off(self, target_class: int, target_object: int) -> None:
+        self._elements[target_class][target_object].forget()
+
     def mediate(self, target_class: int, target_object: int, command: int, *args, **kwargs) -> any:
         return self._commands[target_class][command](self._elements[target_class][target_object], *args, **kwargs)

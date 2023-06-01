@@ -5,9 +5,9 @@ namespace GameMechanics
 {
 	public class Client
 	{
-		protected static readonly SLList<string> _first = FileManipulator.ReadStringList("../../../FirstNames.csv");
-		protected static readonly SLList<string> _second = FileManipulator.ReadStringList("../../../SecondNames.csv");
-		protected static readonly SLList<string> _third = FileManipulator.ReadStringList("../../../ThirdNames.csv");
+		protected static readonly SLList<string> _first = FileManipulator.ReadStringList("../../../materials/FirstNames.csv");
+		protected static readonly SLList<string> _second = FileManipulator.ReadStringList("../../../materials/SecondNames.csv");
+		protected static readonly SLList<string> _third = FileManipulator.ReadStringList("../../../materials/ThirdNames.csv");
 
         protected string _name;
 		protected Requirement _requirement;
