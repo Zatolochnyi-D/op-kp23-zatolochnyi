@@ -1,26 +1,30 @@
 ﻿<Properties StartupConfiguration="{911ECC27-CCB6-4E20-8FEB-4A68A42D81C4}|Default">
+  <MonoDevelop.Ide.ItemProperties.REITSim PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.ItemProperties.REITSim PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.Workbench ActiveDocument="REITSim/Program.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="REITSim/Property.cs">
     <Files>
-      <File FileName="REITSim/Program.cs" Line="72" Column="1" />
-      <File FileName="REITSim/Player.cs" />
-      <File FileName="REITSim/NPCs.cs" />
-      <File FileName="REITSim/Property.cs" />
-      <File FileName="REITSim/World.cs" />
-      <File FileName="REITSim/SLList.cs" />
+      <File FileName="REITSim/Program.cs" Line="9" Column="10" />
+      <File FileName="REITSim/Territory.cs" Line="14" Column="112" />
+      <File FileName="REITSim/Player.cs" Line="121" Column="10" />
+      <File FileName="REITSim/Property.cs" Line="62" Column="14" />
+      <File FileName="REITSim/World.cs" Line="18" Column="33" />
+      <File FileName="REITSim/NPCs.cs" Line="13" Column="106" />
+      <File FileName="REITSim/SLList.cs" Line="1" Column="1" />
+      <File FileName="REITSim/Other.cs" Line="20" Column="37" />
+      <File FileName="REITSim/materials/CityNames.csv" Line="25" Column="8" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="REITSim" expanded="True">
             <Node name="REITSim" expanded="True">
-              <Node name="Program.cs" selected="True" />
+              <Node name="materials" expanded="True" />
+              <Node name="Property.cs" selected="True" />
             </Node>
           </Node>
         </State>

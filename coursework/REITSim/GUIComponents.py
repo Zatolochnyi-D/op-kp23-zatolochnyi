@@ -3,7 +3,7 @@ from tkinter import *
 
 class SimplifiedLabel:
 
-    def __init__(self, root: Tk, options: dict[str, any], placement: dict[str, any]):
+    def __init__(self, root: Tk or Frame, options: dict[str, any], placement: dict[str, any]):
         self._label = Label(root, **options)
         self._placement = placement
 
@@ -19,7 +19,7 @@ class SimplifiedLabel:
 
 class SimplifiedButton:
 
-    def __init__(self, root: Tk, options: dict[str, any], placement: dict[str, any]):
+    def __init__(self, root: Tk or Frame, options: dict[str, any], placement: dict[str, any]):
         self._button = Button(root, **options)
         self._placement = placement
 
@@ -32,7 +32,7 @@ class SimplifiedButton:
 
 class SimplifiedEntry:
 
-    def __init__(self, root: Tk, options: dict[str, any], placement: dict[str, any]):
+    def __init__(self, root: Tk or Frame, options: dict[str, any], placement: dict[str, any]):
         self._variable = StringVar()
         self._entry = Entry(root, textvariable=self._variable, **options)
         self._placement = placement
@@ -52,7 +52,7 @@ class SimplifiedEntry:
 
 class SimplifiedImage:
 
-    def __init__(self, root: Tk, image: str, options: dict[str, any], placement: dict[str, any]):
+    def __init__(self, root: Tk or Frame, image: str, options: dict[str, any], placement: dict[str, any]):
         self._canvas = Canvas(root, **options)
         self._image = PhotoImage(file=image)
         self._canvas.create_image(0, 0, image=self._image)
@@ -63,3 +63,10 @@ class SimplifiedImage:
 
     def forget(self):
         self._canvas.place_forget()
+
+
+class CityItem:
+
+    def __init__(self, root: Tk or Frame):
+        self._frame = Frame(root)
+        # TODO: create layout with city info

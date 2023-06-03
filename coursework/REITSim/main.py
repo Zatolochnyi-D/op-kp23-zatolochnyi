@@ -152,36 +152,39 @@ pages = {
                             {"relx": 0.1, "rely": 0.28, "anchor": "nw"}),
 
             SimplifiedLabel(tk, {"text": "Shares", "font": ("Comic Sans MS", 20)},
-                            {"relx": 0.1, "rely": 0.7, "anchor": "nw"}),
+                            {"relx": 0.1, "rely": 0.5, "anchor": "nw"}),
 
             SimplifiedLabel(tk, {"text": "Share price", "font": ("Comic Sans MS", 20)},
-                            {"relx": 0.1, "rely": 0.75, "anchor": "nw"}),
+                            {"relx": 0.1, "rely": 0.55, "anchor": "nw"}),
 
             SimplifiedLabel(tk, {"text": "How much?", "font": ("Comic Sans MS", 20)},
-                            {"relx": 0.1, "rely": 0.8, "anchor": "nw"}),
+                            {"relx": 0.1, "rely": 0.6, "anchor": "nw"}),
 
             SimplifiedLabel(tk, {"text": "<Turn counter>", "font": ("Comic Sans MS", 20)},
                             {"relx": 0.6, "rely": 0.95, "anchor": "se"}),
+
+            SimplifiedLabel(tk, {"text": "<income>", "font": ("Comic Sans MS", 20)},
+                            {"relx": 0.15, "rely": 0.37, "anchor": "nw"})
         ],
         [
             SimplifiedButton(tk, {"text": "Sell Shares", "font": ("Comic Sans MS", 20), "command": open_sell_shares},
-                             {"relx": 0.1, "rely": 0.8, "anchor": "nw", "relwidth": 0.2, "relheight": 0.05}),
+                             {"relx": 0.1, "rely": 0.6, "anchor": "nw", "relwidth": 0.2, "relheight": 0.05}),
 
             SimplifiedButton(tk, {"text": "Sell", "font": ("Comic Sans MS", 20), "command": sell_shares},
-                             {"relx": 0.1, "rely": 0.85, "anchor": "nw", "relwidth": 0.2, "relheight": 0.05}),
+                             {"relx": 0.1, "rely": 0.65, "anchor": "nw", "relwidth": 0.2, "relheight": 0.05}),
 
             SimplifiedButton(tk, {"text": "Buy Shares", "font": ("Comic Sans MS", 20), "command": open_buy_shares},
-                             {"relx": 0.32, "rely": 0.8, "anchor": "nw", "relwidth": 0.2, "relheight": 0.05}),
+                             {"relx": 0.32, "rely": 0.6, "anchor": "nw", "relwidth": 0.2, "relheight": 0.05}),
 
             SimplifiedButton(tk, {"text": "Buy", "font": ("Comic Sans MS", 20), "command": buy_shares},
-                             {"relx": 0.1, "rely": 0.85, "anchor": "nw", "relwidth": 0.2, "relheight": 0.05}),
+                             {"relx": 0.1, "rely": 0.65, "anchor": "nw", "relwidth": 0.2, "relheight": 0.05}),
 
             SimplifiedButton(tk, {"text": "Next turn", "font": ("Comic Sans MS", 30), "command": next_turn},
                              {"relx": 0.95, "rely": 0.95, "anchor": "se", "relwidth": 0.3, "relheight": 0.15}),
         ],
         [
             SimplifiedEntry(tk, {"font": ("Comic Sans MS", 20)},
-                            {"relx": 0.25, "rely": 0.8, "anchor": "nw", "relwidth": 0.2, "relheight": 0.05}),
+                            {"relx": 0.25, "rely": 0.6, "anchor": "nw", "relwidth": 0.2, "relheight": 0.05}),
         ],
     ],
 }

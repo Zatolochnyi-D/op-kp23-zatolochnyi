@@ -5,7 +5,7 @@ namespace GameMechanics
 {
     public class Player
     {
-        protected const double _startingCapital = 1000.0;
+        public const double StartingCapital = 1000.0;
 
         // === stats ===
         protected string _name;
@@ -47,7 +47,7 @@ namespace GameMechanics
             _name = name;
 
             _reputation = 0;
-            _money = _startingCapital;
+            _money = StartingCapital;
             _income = 0.0;
 
             _oneSharePrice = 0.0;
@@ -117,16 +117,6 @@ namespace GameMechanics
                 _sharesOnExchange.Percent -= sharesAmount;
                 _investor.Percent += sharesAmount;
                 _money = Math.Round(_money + sharesAmount * _oneSharePrice, 2);
-            }
-        }
-
-        protected void UpdateProperty()
-        {
-            foreach (Land land in _property)
-            {
-                _income = land.TotalCost;
-
-                land.NextTurn();
             }
         }
     }
