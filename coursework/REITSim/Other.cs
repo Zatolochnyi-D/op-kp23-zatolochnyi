@@ -5,7 +5,7 @@ namespace GameMechanics
 {
     static public class FileManipulator
     {
-        static public SLList<string> ReadStringList(string path)
+        static public string[] ReadStringList(string path)
         {
             SLList<string> strings = new();
 
@@ -17,7 +17,7 @@ namespace GameMechanics
                 }
             }
 
-            return strings;
+            return strings.ToArray();
         }
     }
 }

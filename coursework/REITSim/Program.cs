@@ -7,39 +7,90 @@ namespace GameMechanics
     {
         static void Main()
         {
-            //SharesTradingTest(21.2);
+            Console.WriteLine("Start of testing:\n");
 
-            //RequirementTest();
+            ClientGenerationTest();
 
-            //CityTest();
+            Pause();
+
+            CityGenerationTest();
+
+            Pause();
         }
 
-        static void CityTest()
+        static void Pause()
         {
-            City city = new();
+            Console.WriteLine("\nPress Enter to continue...");
+            Console.ReadLine();
+            Console.WriteLine();
+        }
 
-            Console.WriteLine($"City tax percent: {city.Taxation}");
+        static void ClientGenerationTest()
+        {
+            Console.WriteLine("Testing client generation. Create 3 clients.");
+
+            Client client1 = new();
+            Client client2 = new();
+            Client client3 = new();
+
+            Console.WriteLine("3 randomly generated clients:\n");
+            PrintClientInfo(client1);
+            PrintClientInfo(client2);
+            PrintClientInfo(client3);
+
+            Console.WriteLine("Clients are generated successfully.");
+            Console.WriteLine();
+        }
+
+        static void PrintClientInfo(Client client)
+        {
+            Console.WriteLine($"Name: {client.Name}");
+            Console.WriteLine($"Holds property?: {client.IsHolder}");
+            Console.WriteLine($"Requires: {client.Requirement.BuildingType.ToString()} of size {client.Requirement.Size}");
+            Console.WriteLine();
+        }
+
+        static void CityGenerationTest()
+        {
+            Console.WriteLine("Testing city generation. Create 3 cities.");
+
+            City city1 = new();
+            City city2 = new();
+            City city3 = new();
+
+            Console.WriteLine("3 randomly generated cities:");
+            PrintCityInfo(city1);
+            PrintCityInfo(city2);
+            PrintCityInfo(city3);
+
+            Console.WriteLine("Cities are generated successfully.");
+            Console.WriteLine();
+        }
+
+        static void PrintCityInfo(City city)
+        {
+            Console.WriteLine($"City name: {city.Name}");
+            Console.WriteLine($"City taxation: {city.Taxation}");
             Console.WriteLine($"City lands:");
+
             foreach (Land land in city.Lands)
             {
-                Console.WriteLine($"    Land taxation: {land.Taxation}");
-                Console.WriteLine($"    Land building:");
-                Console.WriteLine($"    {land.Building?.GetType()}");
+                Console.WriteLine($"    Land size: {land.Size}");
+                if (land.Building != null)
+                {
+                    Console.WriteLine($"    Land building:");
+                    Console.WriteLine($"        Building type: {land.Building.Requirement.BuildingType}");
+                    Console.WriteLine($"        Building size: {land.Building.Requirement.Size}");
+                    Console.WriteLine($"        Building income and maintenance: {land.Building.Income} {land.Building.Maintenance}");
+                }
+                else
+                {
+                    Console.WriteLine($"    Land building: -");
+                }
                 Console.WriteLine();
             }
-
         }
 
-        static void RequirementTest()
-        {
-            Requirement req = new();
-
-            Building a = req.GetBuilding();
-
-            Console.WriteLine("Requirement test.");
-            Console.WriteLine(a.GetType());
-            Console.WriteLine("End of Requirement test\n");
-        }
 
         static void PlayerStats(Player player)
         {
@@ -64,17 +115,9 @@ namespace GameMechanics
 
             PlayerStats(player);
 
-            Console.WriteLine("Next turn while player have shares to sell:");
-            while (player.SharesOnExchange != 0.0)
-            {
-                player.NextTurn();
-                PlayerStats(player);
-            }
+            Console.WriteLine();
 
-            Console.WriteLine("Buy shares back:");
-            player.BuyShares(percent);
-
-            PlayerStats(player);
+            //TODO: make test when player will have income
         }
     }
 }

@@ -3,57 +3,39 @@ using CustomCollections;
 
 namespace GameMechanics
 {
-    interface IRealEstate
+    public class City
     {
-        double TotalCost { get; }
+        public  const int MinTaxPercent = 5;
+        public const int MaxTaxPercent = 20;
+        public const int MinLandAmount = 2;
+        public const int MaxLandAmount = 7;
+        public const int BuildingChance = 30;
 
-        void NextTurn();
-    }
+        protected static readonly string[] _names = FileManipulator.ReadStringList(Path.GetFullPath("../../../materials/CityNames.csv"));
 
-
-    public class City : IRealEstate
-    {
-        protected const int _minTaxPercent = 5;
-        protected const int _maxTaxPercent = 20;
-        protected const int _minLandAmount = 2;
-        protected const int _maxLandAmount = 7;
-        protected const int _buildingChance = 30;
-
+        protected string _name;
         protected double _incomeTaxPercent;
         protected SLList<Land> _lands;
 
+        public string Name => _name;
         public double Taxation => _incomeTaxPercent;
         public SLList<Land> Lands => _lands;
 
-        public double TotalCost
-        {
-            get
-            {
-                double income = 0.0;
-
-                foreach (Land land in _lands)
-                {
-                    double landIncome = land.TotalCost;
-                    income += landIncome > 0.0 ? landIncome * (100.0 - _incomeTaxPercent) : landIncome;
-                }
-
-                return Math.Round(income, 2);
-            }
-        }
-
         public City()
         {
-            _incomeTaxPercent = World.Random.Next(_minTaxPercent, _maxTaxPercent + 1);
+            _name = _names[World.Random.Next(0, _names.Length)];
+
+            _incomeTaxPercent = World.Random.Next(MinTaxPercent, MaxTaxPercent + 1);
 
             _lands = new();
-            for (int i = 0; i < World.Random.Next(_minLandAmount, _maxLandAmount + 1); i++)
+            for (int i = 0; i < World.Random.Next(MinLandAmount, MaxLandAmount + 1); i++)
             {
-                _lands.Add(new());
+                _lands.Add(new(_incomeTaxPercent));
             }
 
             foreach (Land land in _lands)
             {
-                if (World.Random.Next(0, 100) < _buildingChance)
+                if (World.Random.Next(0, 100) < BuildingChance)
                 {
                     land.Build(new Requirement().GetBuilding());
                 }
@@ -62,6 +44,8 @@ namespace GameMechanics
 
         public City(int taxPercent)
         {
+            _name = _names[World.Random.Next(0, _names.Length)];
+
             _incomeTaxPercent = taxPercent;
 
             _lands = new();
@@ -71,38 +55,33 @@ namespace GameMechanics
         {
             _lands.Add(land);
         }
-
-        public void NextTurn()
-        {
-            foreach (Land land in _lands)
-            {
-                land.NextTurn();
-            }
-        }
     }
 
 
-    public class Land : IRealEstate
+    public class Land
     {
-        protected const double _taxation = 100.0;
+        public const double TaxCost = 5.0;
 
         protected int _size;
         protected Building? _building;
+        protected double _cityTax;
 
-        public double TotalCost => (_building != null ? _building.TotalCost : 0) - _taxation * _size;
+        public int Size => _size;
         public Building? Building => _building;
-        public double Taxation => _taxation;
+        public double Taxation => Taxation;
 
-        public Land()
+        public Land(double cityTax)
         {
             _size = World.Random.Next(1, 4);
             _building = null;
+            _cityTax = cityTax;
         }
 
-        public Land(int size)
+        public Land(double cityTax, int size)
         {
             _size = size;
             _building = null;
+            _cityTax = cityTax;
         }
 
         public void Build(Building building)
@@ -113,11 +92,6 @@ namespace GameMechanics
         public void Destroy()
         {
             _building = null;
-        }
-
-        public void NextTurn()
-        {
-            _building?.NextTurn();
         }
     }
 }
