@@ -80,16 +80,16 @@ namespace GameMechanics
         public const double BaseProfit = 30.0;
         public const int BaseRentTime = 20;
 
-        public override double BuilCost => Math.Round(BaseMaintenance * _requirement.Size * 2.0, 2);
+        public override double BuilCost => Math.Round(BaseMaintenance * _requirement.Size * 10.0, 2);
 
-        public override double RazeCost => Math.Round(BaseMaintenance * _requirement.Size * 0.5, 2);
+        public override double RazeCost => Math.Round(BaseMaintenance * _requirement.Size * 3.0, 2);
 
         public Factory(Land land, int size) : base(land)
         {
             _requirement = new(size, "Factory");
 
             _maintenance = BaseMaintenance * _requirement.Size;
-            _profit = BaseProfit * _requirement.Size;
+            _profit = BaseProfit * (_requirement.Size * 1.5);
             _oneRentTime = BaseRentTime;
         }
     }
@@ -98,12 +98,12 @@ namespace GameMechanics
     public class Shop : Building
     {
         public const double BaseMaintenance = 5.0;
-        public const double BaseProfit = 12.0;
+        public const double BaseProfit = 10.0;
         public const int BaseRentTime = 20;
 
-        public override double BuilCost => Math.Round(BaseMaintenance * _requirement.Size, 2);
+        public override double BuilCost => Math.Round(BaseMaintenance * _requirement.Size * 3.0, 2);
 
-        public override double RazeCost => Math.Round(BaseMaintenance * _requirement.Size, 2);
+        public override double RazeCost => Math.Round(BaseMaintenance * _requirement.Size * 1.0, 2);
 
         public Shop(Land land, int size) : base(land)
         {
@@ -122,9 +122,9 @@ namespace GameMechanics
         public const double BaseProfit = 15.0;
         public const int BaseRentTime = 30;
 
-        public override double BuilCost => Math.Round(BaseMaintenance * _requirement.Size, 2);
+        public override double BuilCost => Math.Round(BaseMaintenance * _requirement.Size * 5.0, 2);
 
-        public override double RazeCost => Math.Round(BaseMaintenance * _requirement.Size, 2);
+        public override double RazeCost => Math.Round(BaseMaintenance * _requirement.Size * 1.0, 2);
 
         public Warehouse(Land land, int size) : base(land)
         {
@@ -143,9 +143,9 @@ namespace GameMechanics
         public const double BaseProfit = 15.0;
         public const int BaseRentTime = 30;
 
-        public override double BuilCost => Math.Round(BaseMaintenance * _requirement.Size, 2);
+        public override double BuilCost => Math.Round(BaseMaintenance * _requirement.Size * 3.0, 2);
 
-        public override double RazeCost => Math.Round(BaseMaintenance * _requirement.Size, 2);
+        public override double RazeCost => Math.Round(BaseMaintenance * _requirement.Size * 3.0, 2);
 
         public Office(Land land, int size) : base(land)
         {
@@ -160,13 +160,13 @@ namespace GameMechanics
 
     public class ShoppingCentre : Building
     {
-        public const double BaseMaintenance = 15.0;
-        public const double BaseProfit = 30.0;
+        public const double BaseMaintenance = 10.0;
+        public const double BaseProfit = 40.0;
         public const int BaseRentTime = 30;
 
-        public override double BuilCost => Math.Round(BaseMaintenance * _requirement.Size, 2);
+        public override double BuilCost => Math.Round(BaseMaintenance * _requirement.Size * 15.0, 2);
 
-        public override double RazeCost => Math.Round(BaseMaintenance * _requirement.Size, 2);
+        public override double RazeCost => Math.Round(BaseMaintenance * _requirement.Size * 10.0, 2);
 
         public ShoppingCentre(Land land, int size) : base(land)
         {
