@@ -12,7 +12,7 @@ namespace GameMechanics
         public const int MaxLandAmount = 8;
         public const int BuildingChance = 40;
 
-        protected static readonly string[] _names = FileManipulator.ReadStringList(Path.GetFullPath("../../../materials/CityNames.csv"));
+        protected static readonly string[] _names = FileManipulator.ReadStringList(Path.GetFullPath("materials/CityNames.csv"));
 
         protected string _name;
         protected double _incomeTaxPercent;

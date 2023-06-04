@@ -1,5 +1,5 @@
 from tkinter import *
-from GUIComponents import *
+from GUI.GUIComponents import *
 
 
 class Mediator:

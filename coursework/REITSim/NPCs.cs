@@ -8,9 +8,9 @@ namespace GameMechanics
 	// Client can be a holder only of one building.
 	public class Client
 	{
-		protected static readonly string[] _first = FileManipulator.ReadStringList(Path.GetFullPath("../../../materials/FirstNames.csv"));
-		protected static readonly string[] _second = FileManipulator.ReadStringList(Path.GetFullPath("../../../materials/SecondNames.csv"));
-		protected static readonly string[] _third = FileManipulator.ReadStringList(Path.GetFullPath("../../../materials/ThirdNames.csv"));
+		protected static readonly string[] _first = FileManipulator.ReadStringList(Path.GetFullPath("materials/FirstNames.csv"));
+		protected static readonly string[] _second = FileManipulator.ReadStringList(Path.GetFullPath("materials/SecondNames.csv"));
+		protected static readonly string[] _third = FileManipulator.ReadStringList(Path.GetFullPath("materials/ThirdNames.csv"));
 
         protected string _name;
 		protected Requirement _requirement;
@@ -24,6 +24,7 @@ namespace GameMechanics
         public Client()
 		{
 			Random random = new();
+
 
 			_name = $"{_first[random.Next(0, _first.Length)]} {_second[random.Next(0, _second.Length)]} {_third[random.Next(0, _third.Length)]}";
 
