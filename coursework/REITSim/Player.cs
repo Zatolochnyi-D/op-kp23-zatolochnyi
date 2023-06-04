@@ -85,12 +85,12 @@ namespace GameMechanics
             }
         }
 
-        // Player buys only unclaimed lands.
+        // Player buys only unclaimed lands. +
 
-        // Player not always have money.
+        // Player not always have money. +
         public void BuyLand(Land land)
         {
-            if (land.LandCost < _money)
+            if (land.LandCost <= _money)
             {
                 _money -= land.LandCost;
                 _property.Add(land);
@@ -100,45 +100,42 @@ namespace GameMechanics
             }
         }
 
-        // Input land always belongs to the player.
-        // Player always builds on empty land.
+        // Land always belongs to the player. +
+        // Player always builds on empty land. +
+        // Building always have correct size. +
 
-        // Player not always have money.
-        // Building not always have correct size.
-        public void BuildBuilding(Land land, Requirement building)
+        // Player not always have money. +
+        public void BuildBuilding(Land land, Requirement requirement)
         {
-            Building b = building.GetBuilding(land);
-            if (b.BuilCost < _money)
+            Building building = requirement.GetBuilding(land);
+
+            if (building.BuilCost <= _money)
             {
-                _money -= b.BuilCost;
+                _money -= building.BuilCost;
                 land.Build(building);
 
                 UpdateIncome();
             }
         }
 
-        // Input land always belongs to the player.
-        // Input land always have building.
+        // Land always belongs to the player. +
+        // Land always have building. +
+        // Building is always free. +
 
-        // Player not always have money.
-        // Building can be occupied.
+        // Player not always have money. +
         public void RazeBuilding(Land land)
         {
-            if (!land.Building.Occupied)
+            if (land.Building?.RazeCost <= _money)
             {
-                if (land.Building?.RazeCost < _money)
-                {
-                    _money -= land.Building.RazeCost;
-                    land.Raze();
-                }
-
+                _money -= land.Building.RazeCost;
+                land.Raze();
                 UpdateIncome();
             }
         }
 
-        // Input land always belongs to the player.
-        // Input land always have building.
-        // Input client is always free.
+        // Input land always belongs to the player. +
+        // Input land always have building. +
+        // Input client is always free. +
         public void RentOutBuilding(Land land, Client client)
         {
             land.Building.RentOut(client);
@@ -155,37 +152,6 @@ namespace GameMechanics
             CollectIncome();
 
             UpdateProperty();
-        }
-
-        protected void UpdateSharePrice()
-        {
-            if (_income > 0.0)
-            {
-                _oneSharePrice = (_income / 100.0) * (1.0 + _reputation / 100.0) * SharePriceMultiplier;
-
-                _oneSharePrice = Math.Round(_oneSharePrice, 2);
-            }
-            else
-            {
-                _oneSharePrice = 0.0;
-            }
-        }
-
-        protected void SellShares()
-        {
-            if (_sharesOnExchange.Percent != 0.0 && SharePrice != 0.0)
-            {
-                double[] parts = new double[] { 0.0, 0.25, 0.25, 0.5, 0.5, 0.75, 0.75, 1.0, 1.0, 1.0 };
-                Random random = new();
-
-                double sharesAmount = _sharesOnExchange.Percent * parts[random.Next(0, parts.Length)];
-                sharesAmount = Math.Round(sharesAmount, 2);
-                sharesAmount = Math.Min(_sharesOnExchange.Percent, sharesAmount);
-
-                _sharesOnExchange.Percent -= sharesAmount;
-                _investor.Percent += sharesAmount;
-                _money = Math.Round(_money + sharesAmount * _oneSharePrice, 2);
-            }
         }
 
         protected void UpdateIncome()
@@ -224,6 +190,39 @@ namespace GameMechanics
                 land.Building?.NextTurn();
             }
         }
+
+        protected void UpdateSharePrice()
+        {
+            if (_income > 0.0)
+            {
+                _oneSharePrice = (_income / 100.0) * (1.0 + _reputation / 100.0) * SharePriceMultiplier;
+
+                _oneSharePrice = Math.Round(_oneSharePrice, 2);
+            }
+            else
+            {
+                _oneSharePrice = 0.0;
+            }
+        }
+
+        protected void SellShares()
+        {
+            if (_sharesOnExchange.Percent != 0.0 && SharePrice != 0.0)
+            {
+                double[] parts = new double[] { 0.0, 0.25, 0.25, 0.5, 0.5, 0.75, 0.75, 1.0, 1.0, 1.0 };
+                Random random = new();
+
+                double sharesAmount = _sharesOnExchange.Percent * parts[random.Next(0, parts.Length)];
+                sharesAmount = Math.Round(sharesAmount, 2);
+                sharesAmount = Math.Min(_sharesOnExchange.Percent, sharesAmount);
+
+                _sharesOnExchange.Percent -= sharesAmount;
+                _investor.Percent += sharesAmount;
+                _money = Math.Round(_money + sharesAmount * _oneSharePrice, 2);
+            }
+        }
+
+        
     }
 
 

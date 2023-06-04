@@ -169,15 +169,6 @@ namespace GameMechanics
             _playerProperty = false;
         }
 
-        public void Build(int size, string type)
-        {
-            if (size <= _size)
-            {
-                _building = new Requirement(size, type).GetBuilding(this);
-            }
-            else throw new ArgumentException("Land is too small for this building");
-        }
-
         public void Build(Requirement requirement)
         {
             if (requirement.Size <= _size)
@@ -185,6 +176,11 @@ namespace GameMechanics
                 _building = requirement.GetBuilding(this);
             }
             else throw new ArgumentException("Land is too small for this building");
+        }
+
+        public void Build(Building building)
+        {
+            _building = building;
         }
 
         public void Raze()
