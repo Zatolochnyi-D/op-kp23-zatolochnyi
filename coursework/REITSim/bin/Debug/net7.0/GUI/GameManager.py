@@ -4,7 +4,7 @@ from pythonnet import load
 load("coreclr")
 import clr
 
-clr.AddReference(getcwd() + "/bin/Debug/net7.0/REITSim.dll")
+clr.AddReference(getcwd() + "/REITSim.dll")
 
 import GameMechanics as gm
 

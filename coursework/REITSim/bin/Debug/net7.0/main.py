@@ -1,6 +1,6 @@
 from tkinter import *
-from PageManager import *
-from GameManager import GameManager
+from GUI.PageManager import *
+from GUI.GameManager import GameManager
 
 # global settings
 

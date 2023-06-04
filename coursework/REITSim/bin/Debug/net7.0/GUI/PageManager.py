@@ -1,5 +1,5 @@
 from tkinter import *
-from Mediator import *
+from GUI.Mediator import *
 
 
 class PageManager:
