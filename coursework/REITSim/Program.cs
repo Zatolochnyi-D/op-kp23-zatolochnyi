@@ -9,29 +9,29 @@ namespace GameMechanics
         {
             Console.WriteLine("Start of testing:\n");
 
-            //SortedSLListTest();
+            SortedSLListTest();
 
-            //Pause();
+            Pause();
 
-            //CityLandSortingRuleTest();
+            CityLandSortingRuleTest();
 
-            //Pause();
+            Pause();
 
-            //ClientGenerationTest();
+            ClientGenerationTest();
 
-            //Pause();
+            Pause();
 
-            //CityGenerationTest();
+            CityGenerationTest();
 
-            //Pause();
+            Pause();
 
             LandManagementTest();
 
             Pause();
 
-            //SharesTradingTest();
+            SharesTradingTest();
 
-            //Pause();
+            Console.WriteLine("End of testing.");
         }
 
         static void Pause()
@@ -111,12 +111,12 @@ namespace GameMechanics
             landsArray[7].PlayerProperty = true;
             landsArray[9].PlayerProperty = true;
 
-            landsArray[0].Build(1, "Factory");
-            landsArray[1].Build(2, "Factory");
-            landsArray[4].Build(1, "Shop");
-            landsArray[5].Build(1, "Shop");
-            landsArray[8].Build(2, "Factory");
-            landsArray[9].Build(1, "Factory");
+            landsArray[0].Build(new Requirement(1, "Factory"));
+            landsArray[1].Build(new Requirement(2, "Factory"));
+            landsArray[4].Build(new Requirement(1, "Shop"));
+            landsArray[5].Build(new Requirement(1, "Shop"));
+            landsArray[8].Build(new Requirement(2, "Factory"));
+            landsArray[9].Build(new Requirement(1, "Factory"));
 
 
             foreach (Land land in landsArray)
@@ -197,7 +197,7 @@ namespace GameMechanics
                 Console.WriteLine($"        Building type: {land.Building.Requirement.Type}");
                 Console.WriteLine($"        Building size: {land.Building.Requirement.Size}");
                 Console.WriteLine($"        Building profit and maintenance: {land.Building.Profit} {land.Building.Maintenance}");
-                Console.WriteLine($"        Building build and raze cost: {land.Building.BuilCost} {land.Building.RazeCost}");
+                Console.WriteLine($"        Building build and raze cost: {land.Building.BuildCost} {land.Building.RazeCost}");
             }
             else
             {
@@ -226,57 +226,44 @@ namespace GameMechanics
 
             player.BuyLand(refLand);
 
-            //Console.WriteLine("Build factory of size 1. -75.0, income -15.0 (-20.0)");
+            Console.WriteLine("Build factory of size 1. -150.0, income -15.0 (together -20.0)");
 
-            //player.BuildBuilding(refLand, new Factory(refLand, 1));
-            //city.Lands[0].Building.CityTax = 10.0;
+            player.BuildBuilding(refLand, new(1, "Factory"));
 
-            //Console.WriteLine("Make turn. Player money: 1000.0 - 125.0 - 20.0 = 855.0");
+            Console.WriteLine("Make turn. Player money: 1000.0 - 200.0 - 20.0 = 780.0");
 
-            //player.NextTurn();
+            player.NextTurn();
 
-            //PrintPlayerInfo(player);
+            PrintPlayerInfo(player);
 
-            //Console.WriteLine("Assign client to the factory. income +27.0 (+7.0)");
+            Console.WriteLine("Assign client to the factory. Disable autoextention. income = (+45.0 - 10%) - 20.0 = +20.5");
 
-            //player.RentOutBuilding(city.Lands[0], client);
+            player.RentOutBuilding(refLand, client);
+            refLand.Building.AutoExtention = false;
 
-            //Console.WriteLine("Make 5 turns. Player money: 855.0 + 7.0 * 5 = 890.0");
+            PrintClientInfo(client);
 
-            //for (int i = 0; i < 5; i++)
-            //{
-            //    player.NextTurn();
-            //}
+            Console.WriteLine("Make 20 turns. Player money: 780.0 + 20.5 * 20 = 1190.0");
 
-            //PrintPlayerInfo(player);
+            for (int i = 0; i < 20; i++)
+            {
+                player.NextTurn();
+            }
 
-            //Console.WriteLine("Raze factory");
+            PrintPlayerInfo(player);
 
-            //player.RazeBuilding(city.Lands[0]);
+            PrintClientInfo(client);
 
-            //PrintPlayerInfo(player);
+            Console.WriteLine("Raze factory! 1190.0 - 45.0 = 1145.0");
 
-            //Console.WriteLine("Nothing changed. Factory is occupied. Disable autoextention and wait 15 turns:");
-            //Console.WriteLine("Player money: 890 + 7.0 * 15 = 995.0");
+            player.RazeBuilding(refLand);
+            player.UpdateIncome();
 
-            //city.Lands[0].Building.AutoExtention = false;
+            PrintPlayerInfo(player);
 
-            //for (int i = 0; i < 15; i++)
-            //{
-            //    player.NextTurn();
-            //}
+            PrintClientInfo(client);
 
-            //Console.WriteLine("Now factory is free:");
-
-            //PrintClientInfo(client);
-
-            //Console.WriteLine("Raze it! -15.0. Income = -5.0, Player money: 995.0 - 15.0 = 980.0");
-
-            //player.RazeBuilding(city.Lands[0]);
-
-            //PrintPlayerInfo(player);
-
-            //Console.WriteLine("Land management complete successfully.\n");
+            Console.WriteLine("Land management complete successfully.\n");
         }
 
         static void PrintPlayerInfo(Player player)
@@ -292,55 +279,59 @@ namespace GameMechanics
             Console.WriteLine();
         }
 
-        //static void SharesTradingTest()
-        //{
-        //    Console.WriteLine("Creating actors: player, city (tax = 0%), 5 clients (factories, size 2), factories");
+        static void SharesTradingTest()
+        {
+            Console.WriteLine("Creating actors: player, city (tax = 0%), 4 clients (factories, size 2), factories");
 
-        //    Player player = new("player");
+            Player player = new("player");
 
-        //    Client[] clients = new Client[] { new(2, typeof(Factory)), new(2, typeof(Factory)), new(2, typeof(Factory)), new(2, typeof(Factory)), new(2, typeof(Factory)) };
+            Client[] clients = new Client[] { new(2, "Factory"), new(2, "Factory"), new(2, "Factory"), new(2, "Factory") };
 
-        //    City city = new(0);
+            PrintPlayerInfo(player);
 
-        //    for (int i = 0; i < 5; i++)
-        //    {
-        //        city.Lands.Add(new(0.0, 2));
-        //        city.Lands[i].Build(new Factory(2));
-        //        city.Lands[i].Building.CityTax = 0.0;
-        //        player.BuyLand(city.Lands[i]);
-        //        player.RentOutBuilding(city.Lands[i], clients[i]);
-        //    }
+            City city = new(0);
 
-        //    PlayerStats(player);
+            for (int i = 0; i < 4; i++)
+            {
+                city.AddLand(2);
+            }
 
-        //    Console.WriteLine("Sell 50% of shares:");
+            foreach (Land land in city)
+            {
+                land.Build(new Requirement(2, "Factory"));
+            }
 
-        //    player.SharesToSell(50.0);
+            PrintCityInfo(city);
 
-        //    PlayerStats(player);
+            for (int i = 0; i < 4; i++)
+            {
+                player.BuyLand(city[i]);
+                player.RentOutBuilding(city[i], clients[i]);
+            }
+            player.UpdateIncome();
 
-        //    Console.WriteLine("Wait 10 turns:");
+            PrintPlayerInfo(player);
 
-        //    for (int i = 0; i < 10; i++)
-        //    {
-        //        player.NextTurn();
-        //    }
+            Console.WriteLine("Expected outcome: income = 100.0, end money = 2300.0\n");
 
-        //    PlayerStats(player);
+            Console.WriteLine("Sell 50% of shares:");
 
+            player.SharesToSell(50.0);
+            player.UpdateIncome();
 
-        //    //Player player = new("Name");
+            PrintPlayerInfo(player);
 
-        //    //PlayerStats(player);
+            Console.WriteLine("Wait 10 turns:");
 
-        //    //Console.WriteLine($"Sell {percent}% of shares:");
-        //    //player.SharesToSell(percent);
+            for (int i = 0; i < 10; i++)
+            {
+                player.NextTurn();
+                Console.WriteLine("Turn " + i);
 
-        //    //PlayerStats(player);
+                PrintPlayerInfo(player);
+            }
 
-        //    //Console.WriteLine();
-
-        //    //TODO: make test when player will have income
-        //}
+            Console.WriteLine("End of shares test.\n");
+        }
     }
 }

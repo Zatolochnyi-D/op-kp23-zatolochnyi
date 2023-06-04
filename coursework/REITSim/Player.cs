@@ -6,7 +6,7 @@ namespace GameMechanics
     public class Player
     {
         public const double StartingCapital = 1000.0;
-        public const double SharePriceMultiplier = 5.0;
+        public const double MinSharePrice = 5.0;
 
         // === stats ===
         protected string _name;
@@ -34,6 +34,7 @@ namespace GameMechanics
         public double SharesOnExchange => _sharesOnExchange.Percent;
         public double Income => _income;
         public double Money => _money;
+        public SLList<Land> Property => _property;
 
         public Player(string name)
         {
@@ -77,11 +78,12 @@ namespace GameMechanics
                 {
                     _reputation = 100;
                 }
-                UpdateSharePrice();
 
                 _money = Math.Round(_money - amount * _oneSharePrice, 2);
                 _playerShares.Percent += amount;
                 _investor.Percent -= amount;
+
+                UpdateSharePrice();
             }
         }
 
@@ -94,9 +96,8 @@ namespace GameMechanics
             {
                 _money -= land.LandCost;
                 _property.Add(land);
+                land.PlayerProperty = true;
                 _reputation += 5;
-
-                UpdateIncome();
             }
         }
 
@@ -109,12 +110,10 @@ namespace GameMechanics
         {
             Building building = requirement.GetBuilding(land);
 
-            if (building.BuilCost <= _money)
+            if (building.BuildCost <= _money)
             {
-                _money -= building.BuilCost;
+                _money -= building.BuildCost;
                 land.Build(building);
-
-                UpdateIncome();
             }
         }
 
@@ -129,7 +128,6 @@ namespace GameMechanics
             {
                 _money -= land.Building.RazeCost;
                 land.Raze();
-                UpdateIncome();
             }
         }
 
@@ -141,41 +139,32 @@ namespace GameMechanics
             land.Building.RentOut(client);
         }
 
-        public void NextTurn()
-        {
-            UpdateSharePrice();
-
-            SellShares();
-
-            UpdateIncome();
-
-            CollectIncome();
-
-            UpdateProperty();
-        }
-
-        protected void UpdateIncome()
+        public void UpdateIncome()
         {
             _income = 0.0;
 
             foreach (Land land in _property)
             {
-                _income += land.LandTax;
+                _income += land.Income;
 
-                if (land.Building != null)
-                {
-                    _income += land.Building.Income;
-                }
-            }
-
-            Console.WriteLine(_income);
-            if (_income > 0.0)
-            {
-                Console.WriteLine(_income * (_playerShares.Percent / 100.0));
-                _income = Math.Round(_income * (_playerShares.Percent / 100.0), 2);
+                land.Building?.NextTurn();
             }
 
             UpdateSharePrice();
+
+            if (_income > 0.0)
+            {
+                _income = Math.Round(_income * (_playerShares.Percent / 100.0), 2);
+            }
+        }
+
+        public void NextTurn()
+        {
+            UpdateIncome();
+
+            SellShares();
+
+            CollectIncome();
         }
 
         protected void CollectIncome()
@@ -183,46 +172,32 @@ namespace GameMechanics
             _money += _income;
         }
 
-        protected void UpdateProperty()
-        {
-            foreach (Land land in _property)
-            {
-                land.Building?.NextTurn();
-            }
-        }
-
         protected void UpdateSharePrice()
         {
             if (_income > 0.0)
             {
-                _oneSharePrice = (_income / 100.0) * (1.0 + _reputation / 100.0) * SharePriceMultiplier;
-
-                _oneSharePrice = Math.Round(_oneSharePrice, 2);
+                _oneSharePrice = Math.Round((_income / 10.0) * (1.0 + _reputation / 100.0), 2);
             }
             else
             {
-                _oneSharePrice = 0.0;
+                _oneSharePrice = MinSharePrice;
             }
         }
 
         protected void SellShares()
         {
-            if (_sharesOnExchange.Percent != 0.0 && SharePrice != 0.0)
+            if (_sharesOnExchange.Percent != 0.0 && _oneSharePrice != 0.0)
             {
                 double[] parts = new double[] { 0.0, 0.25, 0.25, 0.5, 0.5, 0.75, 0.75, 1.0, 1.0, 1.0 };
                 Random random = new();
 
-                double sharesAmount = _sharesOnExchange.Percent * parts[random.Next(0, parts.Length)];
-                sharesAmount = Math.Round(sharesAmount, 2);
-                sharesAmount = Math.Min(_sharesOnExchange.Percent, sharesAmount);
+                double sharesAmount = Math.Round(_sharesOnExchange.Percent * parts[random.Next(0, parts.Length)], 2);
 
                 _sharesOnExchange.Percent -= sharesAmount;
                 _investor.Percent += sharesAmount;
                 _money = Math.Round(_money + sharesAmount * _oneSharePrice, 2);
             }
         }
-
-        
     }
 
 
