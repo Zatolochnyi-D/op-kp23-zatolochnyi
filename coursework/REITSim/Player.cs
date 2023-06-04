@@ -6,6 +6,7 @@ namespace GameMechanics
     public class Player
     {
         public const double StartingCapital = 1000.0;
+        public const double SharePriceMultiplier = 5.0;
 
         // === stats ===
         protected string _name;
@@ -33,14 +34,6 @@ namespace GameMechanics
         public double SharesOnExchange => _sharesOnExchange.Percent;
         public double Income => _income;
         public double Money => _money;
-
-        // === getters for testing ===
-        internal Shares PlayerShares => _playerShares;
-        // SharePrice
-        internal double InvestorShares => _investor.Percent;
-        // Reputation
-        // Income
-        // Money
 
         public Player(string name)
         {
@@ -70,6 +63,8 @@ namespace GameMechanics
                 {
                     _reputation = -100;
                 }
+
+                UpdateSharePrice();
             }
         }
 
@@ -90,18 +85,90 @@ namespace GameMechanics
             }
         }
 
+        // Player buys only unclaimed lands.
+
+        // Player not always have money.
+        public void BuyLand(Land land)
+        {
+            if (land.LandCost < _money)
+            {
+                _money -= land.LandCost;
+                _property.Add(land);
+                _reputation += 5;
+
+                UpdateIncome();
+            }
+        }
+
+        // Input land always belongs to the player.
+        // Player always builds on empty land.
+
+        // Player not always have money.
+        // Building not always have correct size.
+        public void BuildBuilding(Land land, Requirement building)
+        {
+            Building b = building.GetBuilding(land);
+            if (b.BuilCost < _money)
+            {
+                _money -= b.BuilCost;
+                land.Build(building);
+
+                UpdateIncome();
+            }
+        }
+
+        // Input land always belongs to the player.
+        // Input land always have building.
+
+        // Player not always have money.
+        // Building can be occupied.
+        public void RazeBuilding(Land land)
+        {
+            if (!land.Building.Occupied)
+            {
+                if (land.Building?.RazeCost < _money)
+                {
+                    _money -= land.Building.RazeCost;
+                    land.Raze();
+                }
+
+                UpdateIncome();
+            }
+        }
+
+        // Input land always belongs to the player.
+        // Input land always have building.
+        // Input client is always free.
+        public void RentOutBuilding(Land land, Client client)
+        {
+            land.Building.RentOut(client);
+        }
+
         public void NextTurn()
         {
             UpdateSharePrice();
 
             SellShares();
+
+            UpdateIncome();
+
+            CollectIncome();
+
+            UpdateProperty();
         }
 
         protected void UpdateSharePrice()
         {
-            _oneSharePrice = (_income / 100.0) * (1.0 + _reputation / 100.0);
+            if (_income > 0.0)
+            {
+                _oneSharePrice = (_income / 100.0) * (1.0 + _reputation / 100.0) * SharePriceMultiplier;
 
-            _oneSharePrice = Math.Round(_oneSharePrice, 2);
+                _oneSharePrice = Math.Round(_oneSharePrice, 2);
+            }
+            else
+            {
+                _oneSharePrice = 0.0;
+            }
         }
 
         protected void SellShares()
@@ -109,14 +176,52 @@ namespace GameMechanics
             if (_sharesOnExchange.Percent != 0.0 && SharePrice != 0.0)
             {
                 double[] parts = new double[] { 0.0, 0.25, 0.25, 0.5, 0.5, 0.75, 0.75, 1.0, 1.0, 1.0 };
+                Random random = new();
 
-                double sharesAmount = _sharesOnExchange.Percent * parts[World.Random.Next(0, parts.Length)];
+                double sharesAmount = _sharesOnExchange.Percent * parts[random.Next(0, parts.Length)];
                 sharesAmount = Math.Round(sharesAmount, 2);
                 sharesAmount = Math.Min(_sharesOnExchange.Percent, sharesAmount);
 
                 _sharesOnExchange.Percent -= sharesAmount;
                 _investor.Percent += sharesAmount;
                 _money = Math.Round(_money + sharesAmount * _oneSharePrice, 2);
+            }
+        }
+
+        protected void UpdateIncome()
+        {
+            _income = 0.0;
+
+            foreach (Land land in _property)
+            {
+                _income += land.LandTax;
+
+                if (land.Building != null)
+                {
+                    _income += land.Building.Income;
+                }
+            }
+
+            Console.WriteLine(_income);
+            if (_income > 0.0)
+            {
+                Console.WriteLine(_income * (_playerShares.Percent / 100.0));
+                _income = Math.Round(_income * (_playerShares.Percent / 100.0), 2);
+            }
+
+            UpdateSharePrice();
+        }
+
+        protected void CollectIncome()
+        {
+            _money += _income;
+        }
+
+        protected void UpdateProperty()
+        {
+            foreach (Land land in _property)
+            {
+                land.Building?.NextTurn();
             }
         }
     }

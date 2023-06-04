@@ -329,7 +329,7 @@ namespace CustomCollections
         protected int _size;
 
         // if true, put item on this place, else go ahead.
-        protected Func<T, T, bool> _compareFunc;
+        protected Func<T, T, bool> _sortingRule;
 
         public T this[int index] { get => GetAt(index); }
 
@@ -341,16 +341,16 @@ namespace CustomCollections
             _tale = null;
             _size = 0;
 
-            _compareFunc = func;
+            _sortingRule = func;
         }
 
-        public SortedSLList(Func<T, T, bool> func, params T[] values)
+        public SortedSLList(Func<T, T, bool> sortingRule, params T[] values)
         {
             _head = null;
             _tale = null;
             _size = 0;
 
-            _compareFunc = func;
+            _sortingRule = sortingRule;
 
             foreach (T el in values)
             {
@@ -394,7 +394,7 @@ namespace CustomCollections
             }
             else if (_head.next == null) // _size == 1
             {
-                if (_compareFunc(_head.data, item))
+                if (_sortingRule(_head.data, item))
                 {
                     _head = new(item, _head);
                     _tale = _head.next;
@@ -411,7 +411,7 @@ namespace CustomCollections
                 SLNode<T> prev = _head;
                 SLNode<T> cur = _head.next;
 
-                if (_compareFunc(prev.data, item))
+                if (_sortingRule(prev.data, item))
                 {
                     _head = new(item, _head);
                 }
@@ -419,7 +419,7 @@ namespace CustomCollections
                 {
                     while (true)
                     {
-                        if (_compareFunc(cur.data, item))
+                        if (_sortingRule(cur.data, item))
                         {
                             prev.next = new(item, cur);
                             return;
@@ -542,7 +542,21 @@ namespace CustomCollections
             T[] array = new T[Count];
             CopyTo(array, 0);
 
-            return new SortedSLList<T>(_compareFunc, array);
+            return new SortedSLList<T>(_sortingRule, array);
+        }
+
+        public void Sort()
+        {
+            SortedSLList<T> list = new(_sortingRule);
+
+            foreach (T el in this)
+            {
+                list.Add(el);
+            }
+
+            _head = list._head;
+            _tale = list._tale;
+            _size = list._size;
         }
 
         public IEnumerator<T> GetEnumerator()

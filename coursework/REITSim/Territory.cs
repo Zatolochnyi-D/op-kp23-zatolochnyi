@@ -1,95 +1,193 @@
 ﻿using System;
+using System.Collections;
 using CustomCollections;
 
 namespace GameMechanics
 {
-    public class City
+    public class City : IEnumerable<Land>
     {
-        public  const int MinTaxPercent = 5;
+        public const int MinTaxPercent = 5;
         public const int MaxTaxPercent = 20;
-        public const int MinLandAmount = 2;
-        public const int MaxLandAmount = 7;
-        public const int BuildingChance = 30;
+        public const int MinLandAmount = 3;
+        public const int MaxLandAmount = 8;
+        public const int BuildingChance = 40;
 
         protected static readonly string[] _names = FileManipulator.ReadStringList(Path.GetFullPath("../../../materials/CityNames.csv"));
 
         protected string _name;
         protected double _incomeTaxPercent;
-        protected SLList<Land> _lands;
+        protected SortedSLList<Land> _lands;
 
         public string Name => _name;
         public double Taxation => _incomeTaxPercent;
-        public SLList<Land> Lands => _lands;
+        public Land this[int index] => _lands[index];
 
+        // New random city.
         public City()
         {
-            _name = _names[World.Random.Next(0, _names.Length)];
+            Random random = new();
 
-            _incomeTaxPercent = World.Random.Next(MinTaxPercent, MaxTaxPercent + 1);
+            _name = _names[random.Next(0, _names.Length)];
+            _incomeTaxPercent = random.Next(MinTaxPercent, MaxTaxPercent + 1);
 
-            _lands = new();
-            for (int i = 0; i < World.Random.Next(MinLandAmount, MaxLandAmount + 1); i++)
+            _lands = new((x, y) =>
             {
-                _lands.Add(new(_incomeTaxPercent));
+                // compare belonging to the player
+                if (x.PlayerProperty && !y.PlayerProperty) return true;
+                if (!x.PlayerProperty && y.PlayerProperty) return false;
+
+                // compare presence of the building
+                if (!x.HaveBuilding && y.HaveBuilding) return true;
+                if (x.HaveBuilding && !y.HaveBuilding) return false;
+
+                // compare lands with buildings
+                if (x.HaveBuilding && y.HaveBuilding)
+                {
+                    // compare types of buildings
+                    if (x.Building.Requirement.CompareTo(y.Building.Requirement) == 1) return true;
+                    if (x.Building.Requirement.CompareTo(y.Building.Requirement) == -1) return false;
+
+                    // compare sizes of buildings
+                    if (x.Building.Requirement.Size > y.Building.Requirement.Size) return true;
+                    if (x.Building.Requirement.Size < y.Building.Requirement.Size) return false;
+                }
+                // compare lands without buildings
+                else
+                {
+                    // compare sizes of lands
+                    if (x.Size > y.Size) return true;
+                    if (x.Size < y.Size) return false;
+                }
+
+                return true;
+            });
+
+            for (int i = 0; i < random.Next(MinLandAmount, MaxLandAmount + 1); i++)
+            {
+                _lands.Add(new(this, random.Next(1, 4)));
             }
 
             foreach (Land land in _lands)
             {
-                if (World.Random.Next(0, 100) < BuildingChance)
+                if (random.Next(1, 101) < BuildingChance)
                 {
-                    land.Build(new Requirement().GetBuilding());
+                    land.Build(new Requirement(random.Next(1, land.Size + 1)));
                 }
             }
+
+            _lands.Sort();
         }
 
+        // New empty city.
         public City(int taxPercent)
         {
-            _name = _names[World.Random.Next(0, _names.Length)];
+            Random random = new();
 
+            _name = _names[random.Next(0, _names.Length)];
             _incomeTaxPercent = taxPercent;
+            _lands = new((x, y) =>
+            {
+                // compare belonging to the player
+                if (x.PlayerProperty && !y.PlayerProperty) return true;
+                if (!x.PlayerProperty && y.PlayerProperty) return false;
 
-            _lands = new();
+                // compare presence of the building
+                if (!x.HaveBuilding && y.HaveBuilding) return true;
+                if (x.HaveBuilding && !y.HaveBuilding) return false;
+
+                // compare lands with buildings
+                if (x.HaveBuilding && y.HaveBuilding)
+                {
+                    // compare types of buildings
+                    if (x.Building.Requirement.CompareTo(y.Building.Requirement) == 1) return true;
+                    if (x.Building.Requirement.CompareTo(y.Building.Requirement) == -1) return false;
+
+                    // compare sizes of buildings
+                    if (x.Building.Requirement.Size > y.Building.Requirement.Size) return true;
+                    if (x.Building.Requirement.Size < y.Building.Requirement.Size) return false;
+                }
+                // compare lands without buildings
+                else
+                {
+                    // compare sizes of lands
+                    if (x.Size > y.Size) return true;
+                    if (x.Size < y.Size) return false;
+                }
+
+                return true;
+            });
         }
 
-        public void AddLand(Land land)
+        public void AddLand(int size)
         {
-            _lands.Add(land);
+            _lands.Add(new(this, size));
+        }
+
+        public void Sort()
+        {
+            _lands.Sort();
+        }
+
+        public IEnumerator<Land> GetEnumerator()
+        {
+            return _lands.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 
 
     public class Land
     {
-        public const double TaxCost = 5.0;
+        public const double BaseTaxCost = 5.0;
+        public const double BaseCostMultiplayer = 10.0;
 
         protected int _size;
         protected Building? _building;
-        protected double _cityTax;
+        protected City _parentCity;
+        protected bool _playerProperty;
 
         public int Size => _size;
         public Building? Building => _building;
-        public double Taxation => Taxation;
+        public bool HaveBuilding => _building != null;
+        public City ParentCity => _parentCity;
+        public bool PlayerProperty { get { return _playerProperty; } set { _playerProperty = value; } }
 
-        public Land(double cityTax)
-        {
-            _size = World.Random.Next(1, 4);
-            _building = null;
-            _cityTax = cityTax;
-        }
+        public double LandCost => BaseTaxCost * BaseCostMultiplayer * _size;
+        public double LandTax => -(BaseTaxCost * _size);
 
-        public Land(double cityTax, int size)
+        public double Income => (HaveBuilding ? _building.Income : 0) + LandTax;
+
+        public Land(City city, int size)
         {
             _size = size;
             _building = null;
-            _cityTax = cityTax;
+            _parentCity = city;
+            _playerProperty = false;
         }
 
-        public void Build(Building building)
+        public void Build(int size, string type)
         {
-            _building = building;
+            if (size <= _size)
+            {
+                _building = new Requirement(size, type).GetBuilding(this);
+            }
+            else throw new ArgumentException("Land is too small for this building");
         }
 
-        public void Destroy()
+        public void Build(Requirement requirement)
+        {
+            if (requirement.Size <= _size)
+            {
+                _building = requirement.GetBuilding(this);
+            }
+            else throw new ArgumentException("Land is too small for this building");
+        }
+
+        public void Raze()
         {
             _building = null;
         }

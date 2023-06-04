@@ -20,18 +20,24 @@ namespace GameMechanics
 		public Requirement Requirement => _requirement;
 		public bool IsHolder => _isHolder;
 
+		// randomly generated client
         public Client()
 		{
-			_name = $"{_first[World.Random.Next(0, _first.Length)]} {_second[World.Random.Next(0, _second.Length)]} {_third[World.Random.Next(0, _third.Length)]}";
+			Random random = new();
+
+			_name = $"{_first[random.Next(0, _first.Length)]} {_second[random.Next(0, _second.Length)]} {_third[random.Next(0, _third.Length)]}";
 
 			_requirement = new();
 
 			_isHolder = false;
 		}
 
-		public Client(int size, Type type)
+		// predefined client
+		public Client(int size, string type)
 		{
-            _name = $"{_first[World.Random.Next(0, _first.Length)]} {_second[World.Random.Next(0, _second.Length)]} {_third[World.Random.Next(0, _third.Length)]}";
+			Random random = new();
+
+            _name = $"{_first[random.Next(0, _first.Length)]} {_second[random.Next(0, _second.Length)]} {_third[random.Next(0, _third.Length)]}";
 
 			_requirement = new(size, type);
 
@@ -53,16 +59,9 @@ namespace GameMechanics
 	// Requirement gerenates randomly.
 	// Requirements can be compared.
 	// Building can be created from requirement.
-	public class Requirement
+	public class Requirement : IComparable<Requirement>
 	{
-		protected static readonly Type[] _types = new Type[]
-		{
-			typeof(Factory),
-			typeof(Shop),
-			typeof(Warehouse),
-			typeof(Office),
-			typeof(ShoppingCentre),
-        };
+		protected static readonly string[] _types = new string[] { "Factory", "Shop", "Warehouse", "Office", "ShoppingCentre", };
 
         protected static readonly int[][] _sizes = new int[][]
         {
@@ -74,31 +73,91 @@ namespace GameMechanics
         };
 
         protected int _size;
-		protected Type _type;
+		protected string _type;
 
 		public int Size => _size;
-		public Type BuildingType => _type;
+		public string Type => _type;
 
+		// randomly generated requirement
 		public Requirement()
 		{
-			int index = World.Random.Next(0, _types.Length);
+			Random random = new();
+
+			int index = random.Next(0, _types.Length);
 
             _type = _types[index];
-			_size = _sizes[index][World.Random.Next(0, 10)];
+			_size = _sizes[index][random.Next(0, 10)];
 		}
 
-		public Requirement(int size, Type type)
+        // Random type with predefined size
+        public Requirement(int size)
+        {
+            Random random = new();
+
+			_size = size;
+
+            int index = 0;
+			do
+			{
+				index = random.Next(0, _types.Length);
+				_type = _types[index];
+			} while (!_sizes[index].Contains(_size));
+        }
+
+        // predefined requirement
+        public Requirement(int size, string type)
 		{
 			_size = size;
 			_type = type;
 		}
 
-		public Building GetBuilding()
+		public Building GetBuilding(Land land)
 		{
-			return (Building)Activator.CreateInstance(_type, _size);
+			switch (_type)
+			{
+                case "Factory":
+					return new Factory(land, _size);
+                case "Shop":
+                    return new Shop(land, _size);
+                case "Warehouse":
+                    return new Warehouse(land, _size);
+                case "Office":
+                    return new Office(land, _size);
+                case "ShoppingCentre":
+                    return new ShoppingCentre(land, _size);
+
+				default:
+                    return new Factory(land, _size);
+            }
 		}
 
-		static public bool operator ==(Requirement a, Requirement b)
+        public int CompareTo(Requirement? other)
+        {
+			if (Nullable.Equals(null, other))
+			{
+				return -1;
+			}
+			else 
+			{
+				int thisIndex = Array.IndexOf(_types, _type);
+				int otherIndex = Array.IndexOf(_types, other._type);
+
+                if (thisIndex < otherIndex)
+				{
+					return -1;
+				}
+				else if (thisIndex > otherIndex)
+				{
+					return 1;
+				}
+				else
+				{
+					return 0;
+				}
+			}
+        }
+
+        static public bool operator ==(Requirement a, Requirement b)
 		{
 			return a._size == b._size && a._type == b._type;
 		}
