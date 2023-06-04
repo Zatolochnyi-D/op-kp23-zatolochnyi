@@ -5,25 +5,37 @@ namespace GameMechanics
 {
     public class World
     {
-        //protected Player _player;
-        //protected SLList<City> _cities;
+        public const int StartingCities = 3;
+        public const int StartingClients = 8;
 
-        //public Player Player => _player;
-        //public SLList<City> Cities => _cities;
+        protected Player _player;
+        protected SLList<City> _cities;
+        protected SLList<Client> _clients;
 
-        //public World(string name)
-        //{
-        //    _player = new(name);
+        public Player Player => _player;
+        public SLList<City> Cities => _cities;
 
-        //    _cities = new();
-        //    _cities.Add(new());
-        //    _cities.Add(new());
-        //    _cities.Add(new());
-        //}
+        public World(string name)
+        {
+            _player = new(name);
 
-        //public void NextTurn()
-        //{
-        //    _player.NextTurn();
-        //}
+            _cities = new();
+            _clients = new();
+
+            for (int i = 0; i < StartingCities; i++)
+            {
+                _cities.Add(new());
+            }
+
+            for (int i = 0; i < StartingClients; i++)
+            {
+                _clients.Add(new());
+            }
+        }
+
+        public void NextTurn()
+        {
+            _player.NextTurn();
+        }
     }
 }

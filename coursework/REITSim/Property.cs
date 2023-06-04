@@ -17,7 +17,7 @@ namespace GameMechanics
         protected bool _autoExtension;
         protected Client? _holder;
 
-        public abstract double BuilCost { get; }
+        public abstract double BuildCost { get; }
         public abstract double RazeCost { get; }
 
         public virtual Requirement Requirement => _requirement;
@@ -80,7 +80,7 @@ namespace GameMechanics
         public const double BaseProfit = 30.0;
         public const int BaseRentTime = 20;
 
-        public override double BuilCost => Math.Round(BaseMaintenance * _requirement.Size * 10.0, 2);
+        public override double BuildCost => Math.Round(BaseMaintenance * _requirement.Size * 10.0, 2);
 
         public override double RazeCost => Math.Round(BaseMaintenance * _requirement.Size * 3.0, 2);
 
@@ -101,7 +101,7 @@ namespace GameMechanics
         public const double BaseProfit = 10.0;
         public const int BaseRentTime = 20;
 
-        public override double BuilCost => Math.Round(BaseMaintenance * _requirement.Size * 3.0, 2);
+        public override double BuildCost => Math.Round(BaseMaintenance * _requirement.Size * 3.0, 2);
 
         public override double RazeCost => Math.Round(BaseMaintenance * _requirement.Size * 1.0, 2);
 
@@ -122,7 +122,7 @@ namespace GameMechanics
         public const double BaseProfit = 15.0;
         public const int BaseRentTime = 30;
 
-        public override double BuilCost => Math.Round(BaseMaintenance * _requirement.Size * 5.0, 2);
+        public override double BuildCost => Math.Round(BaseMaintenance * _requirement.Size * 5.0, 2);
 
         public override double RazeCost => Math.Round(BaseMaintenance * _requirement.Size * 1.0, 2);
 
@@ -143,7 +143,7 @@ namespace GameMechanics
         public const double BaseProfit = 15.0;
         public const int BaseRentTime = 30;
 
-        public override double BuilCost => Math.Round(BaseMaintenance * _requirement.Size * 3.0, 2);
+        public override double BuildCost => Math.Round(BaseMaintenance * _requirement.Size * 3.0, 2);
 
         public override double RazeCost => Math.Round(BaseMaintenance * _requirement.Size * 3.0, 2);
 
@@ -164,7 +164,7 @@ namespace GameMechanics
         public const double BaseProfit = 40.0;
         public const int BaseRentTime = 30;
 
-        public override double BuilCost => Math.Round(BaseMaintenance * _requirement.Size * 15.0, 2);
+        public override double BuildCost => Math.Round(BaseMaintenance * _requirement.Size * 15.0, 2);
 
         public override double RazeCost => Math.Round(BaseMaintenance * _requirement.Size * 10.0, 2);
 
