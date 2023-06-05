@@ -1,5 +1,5 @@
 from tkinter import *
-from GUI.GUIComponents import *
+from GUI.Components import *
 
 
 class Mediator:
@@ -8,8 +8,7 @@ class Mediator:
         self._elements = []
         self._commands = []
 
-    def load(self, components: list[list[SimplifiedButton] or list[SimplifiedLabel]],
-             commands: list[list[classmethod]]) -> None:
+    def load(self, components, commands) -> None:
         self._elements = components
         self._commands = commands
 

@@ -13,8 +13,7 @@ class PageManager:
 
         self._current = ""
 
-    def load(self, entry_page: str, style: dict[str, list[list[list[SimplifiedButton] or list[SimplifiedLabel]]]],
-             commands: dict[str, list[list[classmethod]]]):
+    def load(self, entry_page: str, style, commands):
         for page in self.pages.keys():
             self.pages[page].load(style[page], commands[page])
 

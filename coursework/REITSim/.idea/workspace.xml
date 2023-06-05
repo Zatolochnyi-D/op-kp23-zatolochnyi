@@ -5,19 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a52580e7-0b18-42ef-bf8f-342df39d3178" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../.vs/REITSim/xs/UserPrefs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.vs/REITSim/xs/UserPrefs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GUIComponents.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GameManager.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Mediator.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/NPCs.cs" beforeDir="false" afterPath="$PROJECT_DIR$/NPCs.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PageManager.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Player.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Player.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Territory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Territory.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/materials/CityNames.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/materials/FirstNames.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/materials/SecondNames.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/materials/ThirdNames.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/materials/playerIcon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/World.cs" beforeDir="false" afterPath="$PROJECT_DIR$/World.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Debug/net7.0/GUI/GUIComponents.py" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net7.0/GUI/Components.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Debug/net7.0/GUI/GameManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net7.0/GUI/GameManager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Debug/net7.0/GUI/Mediator.py" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net7.0/GUI/Mediator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Debug/net7.0/GUI/PageManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net7.0/GUI/PageManager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Debug/net7.0/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net7.0/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
