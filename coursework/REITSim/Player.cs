@@ -23,8 +23,6 @@ namespace GameMechanics
         // === property ===
         protected SLList<Land> _property;
 
-
-
         // === data that can be accessed from outside ===
 
         public string Name => _name;
@@ -33,7 +31,7 @@ namespace GameMechanics
         public double Shares => _playerShares.Percent;
         public double SharesOnExchange => _sharesOnExchange.Percent;
         public double Income => _income;
-        public double Money => _money;
+        public double Money { get { return _money; } set { _money = value; } }
         public SLList<Land> Property => _property;
 
         public Player(string name)
@@ -44,7 +42,7 @@ namespace GameMechanics
             _money = StartingCapital;
             _income = 0.0;
 
-            _oneSharePrice = 0.0;
+            _oneSharePrice = 5.0;
 
             _playerShares = new(100.0);
             _sharesOnExchange = new(0.0);

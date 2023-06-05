@@ -14,9 +14,14 @@ class GameManager:
     def __init__(self, name):
         self._game = gm.World(name)
 
+    @property
+    def turn(self) -> int:
+        return self._game.Turn
+
     def get_player_stats(self) -> list:
         return [self._game.Player.Name, self._game.Player.Reputation, self._game.Player.Money,
-                self._game.Player.Shares, self._game.Player.SharePrice, self._game.Player.SharesOnExchange]
+                self._game.Player.Shares, self._game.Player.SharePrice, self._game.Player.SharesOnExchange,
+                self._game.Player.Income]
 
     def sell_shares(self, input: str) -> None:
         try:
@@ -34,5 +39,14 @@ class GameManager:
         else:
             self._game.Player.BuyShares(amount)
 
+    def get_cities(self):
+        return self._game.Cities
+
+    def buy_land(self, land):
+        self._game.Player.BuyLand(land)
+
+    def update_income(self):
+        self._game.Player.UpdateIncome()
+
     def next_turn(self) -> None:
-        self._game.Player.NextTurn()
+        self._game.NextTurn()

@@ -9,7 +9,7 @@ namespace GameMechanics
         public const int MinTaxPercent = 5;
         public const int MaxTaxPercent = 20;
         public const int MinLandAmount = 3;
-        public const int MaxLandAmount = 8;
+        public const int MaxLandAmount = 4;
         public const int BuildingChance = 40;
 
         protected static readonly string[] _names = FileManipulator.ReadStringList(Path.GetFullPath("materials/CityNames.csv"));

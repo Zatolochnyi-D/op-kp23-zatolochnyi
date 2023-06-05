@@ -12,8 +12,11 @@ namespace GameMechanics
         protected SLList<City> _cities;
         protected SLList<Client> _clients;
 
+        protected int _turnCounter;
+
         public Player Player => _player;
         public SLList<City> Cities => _cities;
+        public int Turn => _turnCounter;
 
         public World(string name)
         {
@@ -33,9 +36,27 @@ namespace GameMechanics
             }
         }
 
+        public void Expand()
+        {
+            if (_player.Money >= 100)
+            {
+                _player.Money -= 100;
+            }
+
+            _cities.Add(new());
+        }
+
         public void NextTurn()
         {
+            _turnCounter++;
             _player.NextTurn();
+
+            Random random = new();
+
+            if (random.Next(1, 101) < 40)
+            {
+                _clients.Add(new());
+            }
         }
     }
 }
