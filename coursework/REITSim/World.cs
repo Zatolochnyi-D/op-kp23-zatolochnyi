@@ -6,7 +6,7 @@ namespace GameMechanics
     public class World
     {
         public const int StartingCities = 3;
-        public const int StartingClients = 8;
+        public const int StartingClients = 15;
 
         protected Player _player;
         protected SLList<City> _cities;
@@ -16,6 +16,7 @@ namespace GameMechanics
 
         public Player Player => _player;
         public SLList<City> Cities => _cities;
+        public SLList<Client> Clients => _clients;
         public int Turn => _turnCounter;
 
         public World(string name)

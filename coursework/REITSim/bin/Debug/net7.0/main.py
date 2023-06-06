@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox as msg
 from GUI.PageManager import *
 from GUI.GameManager import GameManager
 from functools import partial
@@ -118,9 +119,11 @@ def on_cities_page() -> None:
     mediator = PM.pages["cities"]
 
     mediator.mediate(0, 1, 0, "Taxation: 0.0")
+    mediator.mediate(0, 3, 0, f"Finances: {GAME.get_player_stats()[2]}")
 
     names = []
     for city in GAME.get_cities():
+        city.Sort()
         names.append(city.Name)
 
     mediator.mediate(2, 0, 0, names)
@@ -128,6 +131,18 @@ def on_cities_page() -> None:
     for i in range(4):
         mediator.mediate(3, i, 1)
         mediator.mediate(3, i, 3)
+
+
+def expand() -> None:
+    mediator = PM.pages["cities"]
+    GAME.expand()
+
+    names = []
+    for city in GAME.get_cities():
+        names.append(city.Name)
+
+    mediator.mediate(2, 0, 0, names)
+    mediator.mediate(0, 3, 0, f"Finances: {GAME.get_player_stats()[2]}")
 
 
 def display_city(value) -> None:
@@ -156,7 +171,7 @@ def display_city(value) -> None:
             info.append(f"Profit: {land.Building.Profit}\n\n")
 
         if land.PlayerProperty:
-            info.append("You already have this land")
+            info.append("You have this land")
         else:
             mediator.mediate(3, i, 2)
             mediator.mediate(3, i, 4, partial(on_buying_land, land, mediator, i))
@@ -173,11 +188,105 @@ def display_city(value) -> None:
 def on_buying_land(land, mediator, i) -> None:
     mediator.mediate(3, i, 3)
     GAME.buy_land(land)
+    mediator.mediate(0, 3, 0, f"Finances: {GAME.get_player_stats()[2]}")
+
+
+def on_property_page() -> None:
+    PM.switch("property")
+
+    mediator = PM.pages["property"]
+
+    mediator.mediate(0, 1, 0, f"Finances: {GAME.get_player_stats()[2]}")
+
+    names = []
+    for land in GAME.get_property():
+        if land.HaveBuilding:
+            names.append(f"{land.ParentCity.Name} {land.Building.Requirement.Type} {land.Building.Requirement.Size}")
+        else:
+            names.append(f"{land.ParentCity.Name} empty")
+
+    if not names:
+        names.append("None")
+
+    mediator.mediate(2, 0, 0, names)
+    mediator.mediate(3, 0, 4)
+    mediator.mediate(3, 0, 2)
+    mediator.mediate(3, 0, 6)
+
+
+def display_land(value) -> None:
+    mediator = PM.pages["property"]
+
+    if value == "None":
+        return
+
+    land = GAME.get_property()[mediator.mediate(2, 0, 1).index(value)]
+
+    info = [
+        f"City: {land.ParentCity.Name} (tax: {land.ParentCity.Taxation})\n"
+        f"Size: {land.Size}\n\n"
+    ]
+
+    if land.HaveBuilding:
+        info.append(f"{land.Building.Requirement.Type} of size {land.Building.Requirement.Size}\n")
+        info.append(f"Maintenance: {land.Building.Maintenance}\n")
+        info.append(f"Profit: {land.Building.Profit}\n")
+        info.append(f"Extend rent? {'Yes' if land.Building.AutoExtention else 'No'}\n")
+
+        mediator.mediate(3, 0, 1)
+        mediator.mediate(3, 0, 3, {"text": F"Raze: {land.Building.RazeCost}$", "command": lambda: raze_building(land)})
+    else:
+        info.append("Empty\n")
+
+    if not land.Building.Occupied and land.HaveBuilding:
+        mediator.mediate(3, 0, 5)
+        mediator.mediate(3, 0, 7, {"text": "Rent Out"})
+
+        clients = []
+        for client in GAME.get_clients():
+            if not client.IsHolder and client.Requirement == land.Building.Requirement:
+                clients.append(client.Name)
+
+        if not clients:
+            clients.append("None")
+
+        mediator.mediate(3, 0, 7, {"command": lambda: rent_out(land)})
+        mediator.mediate(3, 0, 8, clients)
+
+    mediator.mediate(3, 0, 0, info)
+
+
+def rent_out(land) -> None:
+    mediator = PM.pages["property"]
+
+    if mediator.mediate(3, 0, 10) == "None":
+        return
+
+    client = GAME.get_clients()[mediator.mediate(3, 0, 9).index(mediator.mediate(3, 0, 10))]
+
+    if not client.IsHolder and land.HaveBuilding:
+        GAME.rent_out(land, client)
+
+    on_property_page()
+
+
+
+
+def raze_building(land) -> None:
+    GAME.raze_building(land)
+    on_property_page()
 
 
 def next_turn() -> None:
     GAME.next_turn()
     update_main_page()
+
+
+def on_closing() -> None:
+    if msg.askyesno("Quit", "You Sure?"):
+        tk.destroy()
+    else:
+        return
 
 
 pages = {
@@ -274,7 +383,7 @@ pages = {
             SimplifiedButton(tk, {"text": "Cities", "font": ("Comic Sans MS", 25), "command": on_cities_page},
                              {"relx": 0.95, "rely": 0.05, "anchor": "ne", "relwidth": 0.25, "relheight": 0.15}),
 
-            SimplifiedButton(tk, {"text": "Property", "font": ("Comic Sans MS", 25), "command": lambda: PM.switch("property")},
+            SimplifiedButton(tk, {"text": "Property", "font": ("Comic Sans MS", 25), "command": on_property_page},
                              {"relx": 0.95, "rely": 0.25, "anchor": "ne", "relwidth": 0.25, "relheight": 0.15}),
 
             SimplifiedButton(tk, {"text": "Save and quit", "font": ("Comic Sans MS", 25), "command": lambda: print("not awailable")},
@@ -296,13 +405,19 @@ pages = {
 
             SimplifiedLabel(tk, {"text": "Lands:", "font": ("Comic Sans MS", 30)},
                             {"relx": 0.5, "rely": 0.19, "anchor": "n"}),
+
+            SimplifiedLabel(tk, {"text": "Finances", "font": ("Comic Sans MS", 30)},
+                            {"relx": 0.95, "rely": 0.05, "anchor": "ne"}),
         ],
         [
             SimplifiedButton(tk, {"text": "Back", "font": ("Comic Sans MS", 25), "command": on_main_page},
                              {"relx": 0.95, "rely": 0.95, "anchor": "se", "relwidth": 0.25, "relheight": 0.15}),
+
+            SimplifiedButton(tk, {"text": "Expand: 100$", "font": ("Comic Sans MS", 25), "command": expand},
+                             {"relx": 0.65, "rely": 0.95, "anchor": "se", "relwidth": 0.25, "relheight": 0.15}),
         ],
         [
-            SimplifiedDropList(tk, display_city, {"relx": 0.15, "rely": 0.15, "relwidth": 0.2}),
+            SimplifiedDropList(tk, display_city, "Choose a city", {"relx": 0.15, "rely": 0.15, "relwidth": 0.2}),
         ],
         [
             CityLandInfo(tk, {"font": ("Comic Sans MS", 12), "state": "disabled"}, {"relx": 0.05, "rely": 0.3, "relwidth": 0.2, "relheight": 0.4},
@@ -321,8 +436,24 @@ pages = {
 
     "property": [
         [
+            SimplifiedLabel(tk, {"text": "Lands", "font": ("Comic Sans MS", 40)},
+                            {"relx": 0.05, "rely": 0.05, "anchor": "nw"}),
+
+            SimplifiedLabel(tk, {"text": "Finances", "font": ("Comic Sans MS", 30)},
+                            {"relx": 0.95, "rely": 0.05, "anchor": "ne"}),
+        ],
+        [
             SimplifiedButton(tk, {"text": "Back", "font": ("Comic Sans MS", 25), "command": on_main_page},
                              {"relx": 0.95, "rely": 0.95, "anchor": "se", "relwidth": 0.25, "relheight": 0.15}),
+        ],
+        [
+            SimplifiedDropList(tk, display_land, "Choose a land", {"relx": 0.15, "rely": 0.15, "relwidth": 0.3}),
+        ],
+        [
+            PropertyInfo(tk, {"font": ("Comic Sans MS", 12), "state": "disabled"}, {"relx": 0.1, "rely": 0.2, "relwidth": 0.3, "relheight": 0.4},
+                         {"font": ("Comic Sans MS", 20)},
+                         {"relx": 0.45, "rely": 0.6, "anchor": "sw"}, {"relx": 0.45, "rely": 0.3}, {"relx": 0.45, "rely": 0.2, "relwidth": 0.3},
+                         None),
         ],
     ],
 }
@@ -357,7 +488,13 @@ commands = {
     ],
 
     "property": [
+        [SimplifiedLabel.update_text],
         [],
+        [SimplifiedDropList.update, SimplifiedDropList.get_list],
+        [PropertyInfo.update_text, PropertyInfo.enable_interact, PropertyInfo.disable_interact,
+         PropertyInfo.interact_button, PropertyInfo.clear,
+         PropertyInfo.enable_client, PropertyInfo.disable_client, PropertyInfo.client_button, PropertyInfo.update_client_options,
+         PropertyInfo.get_clients_list, PropertyInfo.get_cur_client,]
     ],
 }
 
@@ -367,4 +504,5 @@ PM.load("main_menu", pages, commands)
 
 # start application
 
+tk.protocol("WM_DELETE_WINDOW", on_closing)
 tk.mainloop()

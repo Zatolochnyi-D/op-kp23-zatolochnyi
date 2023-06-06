@@ -48,5 +48,20 @@ class GameManager:
     def update_income(self):
         self._game.Player.UpdateIncome()
 
+    def expand(self):
+        self._game.Expand()
+
+    def get_property(self):
+        return self._game.Player.Property
+
+    def get_clients(self):
+        return self._game.Clients
+
+    def raze_building(self, land):
+        self._game.Player.RazeBuilding(land)
+
+    def rent_out(self, land, client):
+        self._game.Player.RentOutBuilding(land, client)
+
     def next_turn(self) -> None:
         self._game.NextTurn()
