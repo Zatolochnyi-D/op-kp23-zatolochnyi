@@ -56,21 +56,6 @@ class SimplifiedEntry:
         self._variable.set(text)
 
 
-class SimplifiedImage:
-
-    def __init__(self, root: Tk or Frame, image: str, options: dict[str, any], placement: dict[str, any]):
-        self._canvas = Canvas(root, **options)
-        self._image = PhotoImage(file=image)
-        self._canvas.create_image(0, 0, image=self._image)
-        self._placement = placement
-
-    def place(self):
-        self._canvas.place(**self._placement)
-
-    def forget(self):
-        self._canvas.place_forget()
-
-
 class SimplifiedDropList:
     def __init__(self, root: Tk, command, reset_text, placement):
         self._variable = StringVar(root, value=reset_text)
