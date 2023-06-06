@@ -32,6 +32,9 @@ class SimplifiedButton:
     def set_command(self, command):
         self._button.config(command=command)
 
+    def configure(self, options):
+        self._button.configure(**options)
+
 
 class SimplifiedEntry:
 
@@ -69,11 +72,12 @@ class SimplifiedImage:
 
 
 class SimplifiedDropList:
-    def __init__(self, root: Tk, command, placement):
-        self._variable = StringVar(root, value="Choose a city")
+    def __init__(self, root: Tk, command, reset_text, placement):
+        self._variable = StringVar(root, value=reset_text)
         self._root = root
         self._options = ["None"]
         self._command = command
+        self._reset_text = reset_text
 
         self._drop_list = OptionMenu(self._root, self._variable, *self._options, command=self._command)
 
@@ -84,7 +88,7 @@ class SimplifiedDropList:
 
     def forget(self):
         self._drop_list.place_forget()
-        self._variable.set("Choose a city")
+        self._variable.set(self._reset_text)
 
     def update(self, options):
         self._options = options
@@ -94,6 +98,9 @@ class SimplifiedDropList:
 
     def get_list(self):
         return self._options
+
+    def get_current(self):
+        return self._variable.get()
 
 
 class CityLandInfo:
@@ -136,3 +143,73 @@ class CityLandInfo:
 
     def set_command(self, command):
         self._button.set_command(command)
+
+
+class PropertyInfo:
+
+    def __init__(self, root: Tk, options, placement, button_options, ibutton_placement, cbutton_placement,
+                 clients_placement, command):
+        self._textbox = Text(root, **options)
+        self._placement = placement
+
+        self._interact_button = SimplifiedButton(root, button_options, ibutton_placement)
+
+        self._client_button = SimplifiedButton(root, button_options, cbutton_placement)
+        self._clients = SimplifiedDropList(root, command, "Choose a client", clients_placement)
+
+    def place(self):
+        self._textbox.place(self._placement)
+        self._interact_button.place()
+        self._client_button.place()
+        self._clients.place()
+
+    def forget(self):
+        self._textbox.place_forget()
+        self._interact_button.forget()
+        self._client_button.forget()
+        self._clients.forget()
+
+    def update_text(self, info):
+        self._textbox.config(state="normal")
+        self._textbox.delete('1.0', END)
+
+        for line in info:
+            self._textbox.insert(END, line)
+
+        self._textbox.config(state="disabled")
+
+    def clear(self):
+        self._textbox.config(state="normal")
+
+        self._textbox.delete('1.0', END)
+
+        self._textbox.config(state="disabled")
+
+    def enable_interact(self):
+        self._interact_button.place()
+
+    def disable_interact(self):
+        self._interact_button.forget()
+
+    def enable_client(self):
+        self._clients.place()
+        self._client_button.place()
+
+    def disable_client(self):
+        self._clients.forget()
+        self._client_button.forget()
+
+    def interact_button(self, options):
+        self._interact_button.configure(options)
+
+    def client_button(self, options):
+        self._client_button.configure(options)
+
+    def update_client_options(self, options):
+        self._clients.update(options)
+
+    def get_clients_list(self):
+        return self._clients.get_list()
+
+    def get_cur_client(self):
+        return self._clients.get_current()
