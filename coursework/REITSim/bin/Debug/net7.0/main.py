@@ -240,7 +240,6 @@ def display_land(value) -> None:
 
     if not land.Building.Occupied and land.HaveBuilding:
         mediator.mediate(3, 0, 5)
-        mediator.mediate(3, 0, 7, {"text": "Rent Out"})
 
         clients = []
         for client in GAME.get_clients():
@@ -250,7 +249,7 @@ def display_land(value) -> None:
         if not clients:
             clients.append("None")
 
-        mediator.mediate(3, 0, 7, {"command": lambda: rent_out(land)})
+        mediator.mediate(3, 0, 7, {"text": "Rent Out", "command": lambda: rent_out(land)})
         mediator.mediate(3, 0, 8, clients)
 
     mediator.mediate(3, 0, 0, info)
@@ -264,12 +263,12 @@ def rent_out(land) -> None:
 
     client = GAME.get_clients()[mediator.mediate(3, 0, 9).index(mediator.mediate(3, 0, 10))]
 
+    print(f"{not client.IsHolder} and {land.HaveBuilding}")
+    print(not client.IsHolder and land.HaveBuilding)
     if not client.IsHolder and land.HaveBuilding:
         GAME.rent_out(land, client)
 
     on_property_page()
-
-
 
 
 def raze_building(land) -> None:
@@ -278,12 +277,17 @@ def raze_building(land) -> None:
 
 
 def next_turn() -> None:
+    global GAME
     GAME.next_turn()
     update_main_page()
+    if GAME.get_player_stats()[2] < 0.0:
+        msg.showinfo("Bankrupt", "You have no money.\nThe game is over")
+        GAME = None
+        PM.switch("main_menu")
 
 
 def on_closing() -> None:
-    if msg.askyesno("Quit", "You Sure?"):
+    if msg.askyesno("Quit", "Are you sure?"):
         tk.destroy()
     else:
         return
@@ -383,7 +387,7 @@ pages = {
             SimplifiedButton(tk, {"text": "Cities", "font": ("Comic Sans MS", 25), "command": on_cities_page},
                              {"relx": 0.95, "rely": 0.05, "anchor": "ne", "relwidth": 0.25, "relheight": 0.15}),
 
-            SimplifiedButton(tk, {"text": "Property", "font": ("Comic Sans MS", 25), "command": on_property_page},
+            SimplifiedButton(tk, {"text": "Property", "font": ("Comic Sans MS", 25), "command": lambda: print("not awailable")},
                              {"relx": 0.95, "rely": 0.25, "anchor": "ne", "relwidth": 0.25, "relheight": 0.15}),
 
             SimplifiedButton(tk, {"text": "Save and quit", "font": ("Comic Sans MS", 25), "command": lambda: print("not awailable")},
