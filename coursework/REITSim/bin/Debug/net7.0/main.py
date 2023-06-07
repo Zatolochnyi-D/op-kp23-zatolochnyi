@@ -209,16 +209,23 @@ def on_property_page() -> None:
         names.append("None")
 
     mediator.mediate(2, 0, 0, names)
-    mediator.mediate(3, 0, 4)
-    mediator.mediate(3, 0, 2)
-    mediator.mediate(3, 0, 6)
+    mediator.mediate(3, 0, 1)
+
+    mediator.off(1, 1)
+    mediator.off(1, 2)
+    mediator.off(1, 3)
+    mediator.off(1, 4)
+    mediator.off(2, 1)
+    mediator.off(2, 2)
 
 
 def display_land(value) -> None:
-    mediator = PM.pages["property"]
-
     if value == "None":
         return
+
+    mediator = PM.pages["property"]
+    mediator.off(1, 4)
+    mediator.mediate(2, 0, 3, value)
 
     land = GAME.get_property()[mediator.mediate(2, 0, 1).index(value)]
 
@@ -226,54 +233,104 @@ def display_land(value) -> None:
         f"City: {land.ParentCity.Name} (tax: {land.ParentCity.Taxation})\n"
         f"Size: {land.Size}\n\n"
     ]
-
     if land.HaveBuilding:
         info.append(f"{land.Building.Requirement.Type} of size {land.Building.Requirement.Size}\n")
         info.append(f"Maintenance: {land.Building.Maintenance}\n")
         info.append(f"Profit: {land.Building.Profit}\n")
-        info.append(f"Extend rent? {'Yes' if land.Building.AutoExtention else 'No'}\n")
-
-        mediator.mediate(3, 0, 1)
-        mediator.mediate(3, 0, 3, {"text": F"Raze: {land.Building.RazeCost}$", "command": lambda: raze_building(land)})
+        if land.Building.Occupied:
+            info.append(f"Holder: {land.Building.Holder.Name}\n")
+            info.append(f"Rent for {land.Building.RentFor} turns\n")
+        else:
+            info.append("Holder: -")
+        info.append(f"Extend rent? {'Yes' if land.Building.AutoExtention else 'No'}\n\n")
+        info.append(f"Raze cost: {land.Building.RazeCost}")
     else:
         info.append("Empty\n")
 
-    if not land.Building.Occupied and land.HaveBuilding:
-        mediator.mediate(3, 0, 5)
-
-        clients = []
-        for client in GAME.get_clients():
-            if not client.IsHolder and client.Requirement == land.Building.Requirement:
-                clients.append(client.Name)
-
-        if not clients:
-            clients.append("None")
-
-        mediator.mediate(3, 0, 7, {"text": "Rent Out", "command": lambda: rent_out(land)})
-        mediator.mediate(3, 0, 8, clients)
-
     mediator.mediate(3, 0, 0, info)
 
+    if land.HaveBuilding:
+        mediator.on(1, 1)
+        mediator.mediate(1, 1, 0, {"command": lambda: switch_autoextend(land)})
 
-def rent_out(land) -> None:
+        if not land.Building.Occupied:
+            mediator.on(1, 2)
+            mediator.mediate(1, 2, 0, {"command": lambda: raze_building(land)})
+
+            mediator.on(2, 1)
+
+            clients = []
+            for client in GAME.get_clients():
+                if not client.IsHolder and client.Requirement == land.Building.Requirement:
+                    clients.append(client.Name)
+
+            if not clients:
+                clients.append("None")
+            mediator.mediate(2, 1, 0, clients)
+    else:
+        mediator.on(2, 2)
+
+        info = [
+            *[f"Factory {i}" for i in range(1, land.Size + 1)],
+            *[f"Shop {i}" for i in range(1, land.Size + 1)],
+            *[f"Warehouse {i}" for i in range(1, land.Size + 1)],
+            *[f"Office {i}" for i in range(1, land.Size + 1)],
+            *[f"ShoppingCentre {i}" for i in range(1, land.Size + 1)],
+        ]
+
+        mediator.mediate(2, 2, 0, info)
+
+
+def display_building(value) -> None:
     mediator = PM.pages["property"]
 
-    if mediator.mediate(3, 0, 10) == "None":
+    land = GAME.get_property()[mediator.mediate(2, 0, 1).index(mediator.mediate(2, 0, 2))]
+    building = GAME.new_building(*value.split(), land)
+
+    mediator.on(1, 4)
+    mediator.mediate(1, 4, 0, {"text": f"Buy: {building.BuildCost}$", "command": lambda: build(land, building)})
+
+
+def build(land, building) -> None:
+    GAME.build(land, building)
+    on_property_page()
+    display_land(f"{land.ParentCity.Name} {f'{land.Building.Requirement.Type} {land.Building.Requirement.Size}' if land.HaveBuilding else 'empty'}")
+
+
+def display_client(value) -> None:
+    if value == "None":
         return
 
-    client = GAME.get_clients()[mediator.mediate(3, 0, 9).index(mediator.mediate(3, 0, 10))]
+    mediator = PM.pages["property"]
 
-    print(f"{not client.IsHolder} and {land.HaveBuilding}")
-    print(not client.IsHolder and land.HaveBuilding)
-    if not client.IsHolder and land.HaveBuilding:
-        GAME.rent_out(land, client)
+    land = GAME.get_property()[mediator.mediate(2, 0, 1).index(mediator.mediate(2, 0, 2))]
+    client = GAME.get_clients()[mediator.mediate(2, 1, 1).index(value)]
+
+    mediator.on(1, 3)
+    mediator.mediate(1, 3, 0, {"command": lambda: rent_out(land, client)})
+
+
+def rent_out(land, client) -> None:
+    GAME.rent_out(land, client)
 
     on_property_page()
+    display_land(f"{land.ParentCity.Name} {f'{land.Building.Requirement.Type} {land.Building.Requirement.Size}' if land.HaveBuilding else 'empty'}")
+
+
+def switch_autoextend(land) -> None:
+    if land.Building.AutoExtention:
+        land.Building.AutoExtention = False
+    else:
+        land.Building.AutoExtention = True
+
+    on_property_page()
+    display_land(f"{land.ParentCity.Name} {f'{land.Building.Requirement.Type} {land.Building.Requirement.Size}' if land.HaveBuilding else 'empty'}")
 
 
 def raze_building(land) -> None:
     GAME.raze_building(land)
     on_property_page()
+    display_land(f"{land.ParentCity.Name} {f'{land.Building.Requirement.Type} {land.Building.Requirement.Size}' if land.HaveBuilding else 'empty'}")
 
 
 def next_turn() -> None:
@@ -387,7 +444,7 @@ pages = {
             SimplifiedButton(tk, {"text": "Cities", "font": ("Comic Sans MS", 25), "command": on_cities_page},
                              {"relx": 0.95, "rely": 0.05, "anchor": "ne", "relwidth": 0.25, "relheight": 0.15}),
 
-            SimplifiedButton(tk, {"text": "Property", "font": ("Comic Sans MS", 25), "command": lambda: print("not awailable")},
+            SimplifiedButton(tk, {"text": "Property", "font": ("Comic Sans MS", 25), "command": on_property_page},
                              {"relx": 0.95, "rely": 0.25, "anchor": "ne", "relwidth": 0.25, "relheight": 0.15}),
 
             SimplifiedButton(tk, {"text": "Save and quit", "font": ("Comic Sans MS", 25), "command": lambda: print("not awailable")},
@@ -449,15 +506,28 @@ pages = {
         [
             SimplifiedButton(tk, {"text": "Back", "font": ("Comic Sans MS", 25), "command": on_main_page},
                              {"relx": 0.95, "rely": 0.95, "anchor": "se", "relwidth": 0.25, "relheight": 0.15}),
+
+            SimplifiedButton(tk, {"text": "Auto Extend", "font": ("Comic Sans MS", 15)},
+                             {"relx": 0.1, "rely": 0.65, "relwidth": 0.15, "relheight": 0.07}),
+
+            SimplifiedButton(tk, {"text": "Raze", "font": ("Comic Sans MS", 15)},
+                             {"relx": 0.45, "rely": 0.6, "anchor": "sw", "relwidth": 0.15, "relheight": 0.07}),
+
+            SimplifiedButton(tk, {"text": "Rent out", "font": ("Comic Sans MS", 15)},
+                             {"relx": 0.45, "rely": 0.3, "relwidth": 0.15, "relheight": 0.07}),
+
+            SimplifiedButton(tk, {"text": "Build", "font": ("Comic Sans MS", 15)},
+                             {"relx": 0.45, "rely": 0.6, "anchor": "sw", "relwidth": 0.15, "relheight": 0.07}),
         ],
         [
             SimplifiedDropList(tk, display_land, "Choose a land", {"relx": 0.15, "rely": 0.15, "relwidth": 0.3}),
+            SimplifiedDropList(tk, display_client, "Choose a client", {"relx": 0.45, "rely": 0.2, "relwidth": 0.3}),
+            SimplifiedDropList(tk, display_building, "Choose a building",
+                               {"relx": 0.45, "rely": 0.5, "anchor": "sw", "relwidth": 0.3}),
         ],
         [
-            PropertyInfo(tk, {"font": ("Comic Sans MS", 12), "state": "disabled"}, {"relx": 0.1, "rely": 0.2, "relwidth": 0.3, "relheight": 0.4},
-                         {"font": ("Comic Sans MS", 20)},
-                         {"relx": 0.45, "rely": 0.6, "anchor": "sw"}, {"relx": 0.45, "rely": 0.3}, {"relx": 0.45, "rely": 0.2, "relwidth": 0.3},
-                         None),
+            PropertyInfo(tk, {"font": ("Comic Sans MS", 14), "state": "disabled"},
+                         {"relx": 0.1, "rely": 0.2, "relwidth": 0.3, "relheight": 0.4}),
         ],
     ],
 }
@@ -493,12 +563,9 @@ commands = {
 
     "property": [
         [SimplifiedLabel.update_text],
-        [],
-        [SimplifiedDropList.update, SimplifiedDropList.get_list],
-        [PropertyInfo.update_text, PropertyInfo.enable_interact, PropertyInfo.disable_interact,
-         PropertyInfo.interact_button, PropertyInfo.clear,
-         PropertyInfo.enable_client, PropertyInfo.disable_client, PropertyInfo.client_button, PropertyInfo.update_client_options,
-         PropertyInfo.get_clients_list, PropertyInfo.get_cur_client,]
+        [SimplifiedButton.configure],
+        [SimplifiedDropList.update, SimplifiedDropList.get_list, SimplifiedDropList.get_current, SimplifiedDropList.set],
+        [PropertyInfo.update, PropertyInfo.clear]
     ],
 }
 

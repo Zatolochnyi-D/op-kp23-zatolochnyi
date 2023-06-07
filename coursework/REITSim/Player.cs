@@ -147,6 +147,7 @@ namespace GameMechanics
 
                 land.Building?.NextTurn();
             }
+            _income = Math.Round(_income, 2);
 
             UpdateSharePrice();
 

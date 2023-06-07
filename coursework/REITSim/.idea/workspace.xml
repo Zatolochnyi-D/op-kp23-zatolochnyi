@@ -5,9 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a52580e7-0b18-42ef-bf8f-342df39d3178" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../.vs/REITSim/xs/UserPrefs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.vs/REITSim/xs/UserPrefs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Player.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Player.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Property.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Property.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/net7.0/GUI/Components.py" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net7.0/GUI/Components.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/Debug/net7.0/GUI/PageManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net7.0/GUI/PageManager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Debug/net7.0/GUI/GameManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net7.0/GUI/GameManager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Debug/net7.0/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net7.0/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
