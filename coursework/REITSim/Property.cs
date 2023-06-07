@@ -23,9 +23,11 @@ namespace GameMechanics
         public virtual Requirement Requirement => _requirement;
         public virtual double Maintenance => _maintenance;
         public virtual double Profit => _profit;
+        public virtual Client? Holder => _holder;
         public virtual Land ParentLand => _parentLand;
         
         public virtual bool Occupied => _holder != null;
+        public virtual int RentFor => _rentExpireAfter;
         public virtual bool AutoExtention { get { return _autoExtension; } set { _autoExtension = value; } }
 
         public virtual double Income => (_profit * (1.0 - _parentLand.ParentCity.Taxation / 100.0)) * (Occupied ? 1.0 : 0.0) - _maintenance;

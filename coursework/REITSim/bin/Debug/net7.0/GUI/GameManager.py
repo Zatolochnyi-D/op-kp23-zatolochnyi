@@ -63,5 +63,11 @@ class GameManager:
     def rent_out(self, land, client):
         self._game.Player.RentOutBuilding(land, client)
 
+    def new_building(self, type, size, land):
+        return gm.Requirement(int(size), type).GetBuilding(land)
+
+    def build(self, land, building):
+        self._game.Player.BuildBuilding(land, building.Requirement)
+
     def next_turn(self) -> None:
         self._game.NextTurn()
