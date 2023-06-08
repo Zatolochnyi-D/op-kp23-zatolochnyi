@@ -168,7 +168,7 @@ namespace GameMechanics
 
         protected void CollectIncome()
         {
-            _money += _income;
+            _money = Math.Round(_money + _income, 2);
         }
 
         protected void UpdateSharePrice()
