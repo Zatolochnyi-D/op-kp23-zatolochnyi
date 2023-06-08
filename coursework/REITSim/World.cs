@@ -10,13 +10,13 @@ namespace GameMechanics
 
         protected Player _player;
         protected SLList<City> _cities;
-        protected SLList<Client> _clients;
+        protected SortedSLList<Client> _clients;
 
         protected int _turnCounter;
 
         public Player Player => _player;
         public SLList<City> Cities => _cities;
-        public SLList<Client> Clients => _clients;
+        public SortedSLList<Client> Clients => _clients;
         public int Turn => _turnCounter;
 
         public World(string name)
@@ -24,7 +24,22 @@ namespace GameMechanics
             _player = new(name);
 
             _cities = new();
-            _clients = new();
+            _clients = new((x, y) =>
+            {
+                if (x.IsHolder && !y.IsHolder) return true;
+                if (!x.IsHolder && y.IsHolder) return false;
+
+                if (!x.IsHolder && !y.IsHolder)
+                {
+                    if (x.Requirement.CompareTo(y.Requirement) == 1) return true;
+                    if (x.Requirement.CompareTo(y.Requirement) == -1) return false;
+
+                    if (x.Requirement.Size > y.Requirement.Size) return true;
+                    if (x.Requirement.Size < y.Requirement.Size) return false;
+                }
+
+                return true;
+            });
 
             for (int i = 0; i < StartingCities; i++)
             {
@@ -42,9 +57,8 @@ namespace GameMechanics
             if (_player.Money >= 100)
             {
                 _player.Money -= 100;
+                _cities.Add(new());
             }
-
-            _cities.Add(new());
         }
 
         public void NextTurn()

@@ -23,7 +23,7 @@ tk.resizable(GS["resizable_W"], GS["resizable_H"])
 
 # create page manager and game variable
 
-PM = PageManager(tk, ["main_menu", "new_game", "load_game", "main_game_menu", "cities", "property"])
+PM = PageManager(tk, ["main_menu", "new_game", "load_game", "main_game_menu", "cities", "property", "clients"])
 GAME: GameManager or None = None
 
 # define functions, add pages content and available commands
@@ -333,11 +333,28 @@ def raze_building(land) -> None:
     display_land(f"{land.ParentCity.Name} {f'{land.Building.Requirement.Type} {land.Building.Requirement.Size}' if land.HaveBuilding else 'empty'}")
 
 
+def on_client_page() -> None:
+    PM.switch("clients")
+    mediator = PM.pages["clients"]
+
+    info = []
+
+    GAME.get_clients().Sort()
+    for client in GAME.get_clients():
+        info.append(f"{client.Name}\n")
+        if not client.IsHolder:
+            info.append(f"Requires: {client.Requirement.Type} of size {client.Requirement.Size}\n\n")
+        else:
+            info.append("already rents property\n\n")
+
+    mediator.mediate(2, 0, 0, info)
+
+
 def next_turn() -> None:
     global GAME
     GAME.next_turn()
     update_main_page()
-    if GAME.get_player_stats()[2] < 0.0:
+    if GAME.get_player_stats()[2] <= 0.0:
         msg.showinfo("Bankrupt", "You have no money.\nThe game is over")
         GAME = None
         PM.switch("main_menu")
@@ -449,6 +466,9 @@ pages = {
 
             SimplifiedButton(tk, {"text": "Save and quit", "font": ("Comic Sans MS", 25), "command": lambda: print("not awailable")},
                              {"relx": 0.05, "rely": 0.95, "anchor": "sw", "relwidth": 0.25, "relheight": 0.15}),
+
+            SimplifiedButton(tk, {"text": "Clients", "font": ("Comic Sans MS", 25), "command": on_client_page},
+                             {"relx": 0.95, "rely": 0.45, "anchor": "ne", "relwidth": 0.25, "relheight": 0.15}),
         ],
         [
             SimplifiedEntry(tk, {"font": ("Comic Sans MS", 20)},
@@ -530,6 +550,21 @@ pages = {
                          {"relx": 0.1, "rely": 0.2, "relwidth": 0.3, "relheight": 0.4}),
         ],
     ],
+
+    "clients": [
+        [
+            SimplifiedLabel(tk, {"text": "Clients", "font": ("Comic Sans MS", 40)},
+                            {"relx": 0.05, "rely": 0.05, "anchor": "nw"}),
+        ],
+        [
+            SimplifiedButton(tk, {"text": "Back", "font": ("Comic Sans MS", 25), "command": on_main_page},
+                             {"relx": 0.95, "rely": 0.95, "anchor": "se", "relwidth": 0.25, "relheight": 0.15}),
+        ],
+        [
+            PropertyInfo(tk, {"font": ("Comic Sans MS", 14), "state": "disabled"},
+                         {"relx": 0.5, "rely": 0.15, "anchor": "n", "relwidth": 0.35, "relheight": 0.55}),
+        ],
+    ],
 }
 
 commands = {
@@ -566,6 +601,12 @@ commands = {
         [SimplifiedButton.configure],
         [SimplifiedDropList.update, SimplifiedDropList.get_list, SimplifiedDropList.get_current, SimplifiedDropList.set],
         [PropertyInfo.update, PropertyInfo.clear]
+    ],
+
+    "clients": [
+        [],
+        [],
+        [PropertyInfo.update, PropertyInfo.clear],
     ],
 }
 
