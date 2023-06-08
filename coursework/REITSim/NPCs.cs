@@ -12,6 +12,8 @@ namespace GameMechanics
 		protected static readonly string[] _second = FileManipulator.ReadStringList(Path.GetFullPath("materials/SecondNames.csv"));
 		protected static readonly string[] _third = FileManipulator.ReadStringList(Path.GetFullPath("materials/ThirdNames.csv"));
 
+		protected static readonly SLList<string> _usedNames = new();
+
         protected string _name;
 		protected Requirement _requirement;
 		protected bool _isHolder;
@@ -25,8 +27,11 @@ namespace GameMechanics
 		{
 			Random random = new();
 
-
-			_name = $"{_first[random.Next(0, _first.Length)]} {_second[random.Next(0, _second.Length)]} {_third[random.Next(0, _third.Length)]}";
+			do
+			{
+				_name = $"{_first[random.Next(0, _first.Length)]} {_second[random.Next(0, _second.Length)]} {_third[random.Next(0, _third.Length)]}";
+			} while (_usedNames.Contains(_name));
+			_usedNames.Add(_name);
 
 			_requirement = new();
 
@@ -38,9 +43,13 @@ namespace GameMechanics
 		{
 			Random random = new();
 
-            _name = $"{_first[random.Next(0, _first.Length)]} {_second[random.Next(0, _second.Length)]} {_third[random.Next(0, _third.Length)]}";
+            do
+            {
+                _name = $"{_first[random.Next(0, _first.Length)]} {_second[random.Next(0, _second.Length)]} {_third[random.Next(0, _third.Length)]}";
+            } while (_usedNames.Contains(_name));
+            _usedNames.Add(_name);
 
-			_requirement = new(size, type);
+            _requirement = new(size, type);
 
 			_isHolder = false;
         }

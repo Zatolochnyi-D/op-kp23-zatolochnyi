@@ -13,6 +13,7 @@ namespace GameMechanics
         public const int BuildingChance = 40;
 
         protected static readonly string[] _names = FileManipulator.ReadStringList(Path.GetFullPath("materials/CityNames.csv"));
+        protected static readonly SLList<string> _usedNames = new();
 
         protected string _name;
         protected double _incomeTaxPercent;
@@ -27,7 +28,12 @@ namespace GameMechanics
         {
             Random random = new();
 
-            _name = _names[random.Next(0, _names.Length)];
+            do
+            {
+                _name = _names[random.Next(0, _names.Length)];
+            } while (_usedNames.Contains(_name));
+            _usedNames.Add(_name);
+
             _incomeTaxPercent = random.Next(MinTaxPercent, MaxTaxPercent + 1);
 
             _lands = new((x, y) =>
@@ -83,7 +89,12 @@ namespace GameMechanics
         {
             Random random = new();
 
-            _name = _names[random.Next(0, _names.Length)];
+            do
+            {
+                _name = _names[random.Next(0, _names.Length)];
+            } while (_usedNames.Contains(_name));
+            _usedNames.Add(_name);
+
             _incomeTaxPercent = taxPercent;
             _lands = new((x, y) =>
             {
