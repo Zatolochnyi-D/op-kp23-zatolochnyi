@@ -5,7 +5,7 @@ namespace GameMechanics
 {
     static public class FileManipulator
     {
-        static public string[] ReadStringList(string path)
+        public static string[] ReadStringList(string path)
         {
             SLList<string> strings = new();
 
