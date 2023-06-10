@@ -241,7 +241,7 @@ def display_land(value) -> None:
             info.append(f"Holder: {land.Building.Holder.Name}\n")
             info.append(f"Rent for {land.Building.RentFor} turns\n")
         else:
-            info.append("Holder: -")
+            info.append("Holder: -\n")
         info.append(f"Extend rent? {'Yes' if land.Building.AutoExtention else 'No'}\n\n")
         info.append(f"Raze cost: {land.Building.RazeCost}")
     else:
