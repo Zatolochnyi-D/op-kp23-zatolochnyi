@@ -77,7 +77,7 @@ namespace Assignment
             }
 
             int hash = key.GetHashCode();
-            int index = Additions.Mod(Additions.Mod(hash, _capacity) + (i * Additions.Mod(hash, _capacity - 1) + 1), _capacity);
+            int index = Additions.Mod(Additions.Mod(hash, _capacity) + i * (Additions.Mod(hash, _capacity - 1) + 1), _capacity);
 
             return index;
         }
